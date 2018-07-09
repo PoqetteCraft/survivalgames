@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.pocketkid2</groupId>
 	<artifactId>survivalgames</artifactId>
-	<version>ALPHA-b001</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>SurvivalGames</name>
 	<properties>
 		<author>Pocketkid2</author>
