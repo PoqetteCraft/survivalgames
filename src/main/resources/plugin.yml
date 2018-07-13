@@ -2,3 +2,10 @@ name: ${name}
 version: ${version}
 main: ${groupId}.${artifactId}.${name}Plugin
 author: ${author}
+commands:
+    survivalgames:
+        description: Base command
+        usage: /<command> [args]
+        aliases: [sg]
+permissions:
+    survivalgames.command
