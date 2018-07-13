@@ -12,6 +12,7 @@ public class Game {
 
 	public enum Status {
 
+		DISABLED(ChatColor.DARK_RED + "Disabled"),
 		RESETTING(ChatColor.AQUA + "Resetting map"),
 		WAITING(ChatColor.GREEN + "Waiting for players"),
 		STARTING(ChatColor.GOLD + "Counting down"),
@@ -28,6 +29,9 @@ public class Game {
 		}
 	}
 
+	// Each game has a status
+	private Status status;
+
 	// Each game has a map
 	private Map map;
 
@@ -42,5 +46,19 @@ public class Game {
 		map = m;
 		activePlayers = new ArrayList<Player>();
 		inactivePlayers = new ArrayList<OfflinePlayer>();
+	}
+
+	public Map getMap() {
+		return map;
+	}
+
+	/**
+	 * Stops the game peacefully and resets the arena
+	 */
+	public void stop() {
+		status = Status.RESETTING;
+		// TODO reset players
+		// TODO reset blocks
+		status = Status.WAITING;
 	}
 }

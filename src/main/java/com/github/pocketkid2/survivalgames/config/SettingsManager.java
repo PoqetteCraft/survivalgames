@@ -19,7 +19,7 @@ public class SettingsManager {
 		map_config.saveDefaultConfig();
 	}
 
-	public List<Map> getAllMaps() {
+	public List<Map> loadAllMaps() {
 		List<String> names = main_config.getStringList("all-maps");
 
 		List<Map> arenas = new ArrayList<Map>();
@@ -27,6 +27,11 @@ public class SettingsManager {
 			arenas.add(map_config.getConfig().getSerializable(s, Map.class));
 		}
 		return arenas;
+	}
+
+	public void saveAllMaps(List<Map> arenas) {
+		map_config.getConfig().set("all-maps", arenas);
+		map_config.saveConfig();
 	}
 
 }

@@ -76,6 +76,13 @@ public class Map implements ConfigurationSerializable {
 	}
 
 	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
 	 * @return the center
 	 */
 	public Location getCenter() {

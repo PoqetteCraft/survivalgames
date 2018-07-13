@@ -12,11 +12,26 @@ public class GameManager {
 	public GameManager(SurvivalGamesPlugin plugin, SettingsManager sm) {
 		games = new ArrayList<Game>();
 
-		List<Map> arenas = sm.getAllMaps();
+		List<Map> arenas = sm.loadAllMaps();
 
 		for (Map m : arenas) {
 			games.add(new Game(m));
 		}
+	}
+
+	public void shutdown(SettingsManager sm) {
+		// Stop all games peacefully
+		for (Game g : games) {
+			g.stop();
+		}
+
+		List<Map> arenas = new ArrayList<Map>();
+
+		for (Game g : games) {
+			arenas.add(g.getMap());
+		}
+
+		sm.saveAllMaps(arenas);
 	}
 
 }
