@@ -3,6 +3,8 @@ package com.github.pocketkid2.survivalgames;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.pocketkid2.survivalgames.config.SettingsManager;
+
 public class GameManager {
 
 	private List<Game> games;

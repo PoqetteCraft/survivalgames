@@ -1,4 +1,4 @@
-package com.github.pocketkid2.survivalgames;
+package com.github.pocketkid2.survivalgames.config;
 
 /*
 * Copyright (C) 2012

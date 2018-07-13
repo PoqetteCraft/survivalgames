@@ -1,9 +1,12 @@
-package com.github.pocketkid2.survivalgames;
+package com.github.pocketkid2.survivalgames.config;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
+
+import com.github.pocketkid2.survivalgames.Map;
+import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 
 public class SettingsManager {
 

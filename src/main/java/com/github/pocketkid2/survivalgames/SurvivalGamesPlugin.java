@@ -3,6 +3,8 @@ package com.github.pocketkid2.survivalgames;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.pocketkid2.survivalgames.config.SettingsManager;
+
 public class SurvivalGamesPlugin extends JavaPlugin {
 
 	private SettingsManager sm;
