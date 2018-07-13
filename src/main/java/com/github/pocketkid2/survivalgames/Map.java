@@ -1,11 +1,17 @@
 package com.github.pocketkid2.survivalgames;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 // Represents a physical map region for a game
-public class Map {
+public class Map implements ConfigurationSerializable {
+
+	// Each map has a name
+	private String name;
 
 	// The center of the map (should be player-accessible, this will be the default
 	// spectator spawnpoint)
@@ -18,9 +24,20 @@ public class Map {
 	private List<Location> spawns;
 
 	// Base constructor
-	public Map(Location center, int radius) {
+	public Map(String name, Location center, int radius) {
+		this.name = name;
 		this.center = center;
 		this.radius = radius;
+		spawns = new ArrayList<Location>();
+	}
+
+	// Serialization constructor
+	@SuppressWarnings("unchecked")
+	public Map(java.util.Map<String, Object> objects) {
+		name = (String) objects.get("name");
+		center = (Location) objects.get("center");
+		radius = (int) objects.get("radius");
+		spawns = (List<Location>) objects.get("spawns");
 	}
 
 	/**
@@ -49,7 +66,7 @@ public class Map {
 
 	/**
 	 * Add this spawn to the list
-	 * 
+	 *
 	 * @param loc The spawn location to add
 	 */
 	public void addSpawn(Location loc) {
@@ -91,6 +108,16 @@ public class Map {
 		} else {
 			return spawns.get(index);
 		}
+	}
+
+	@Override
+	public java.util.Map<String, Object> serialize() {
+		java.util.Map<String, Object> objects = new HashMap<String, Object>();
+		objects.put("name", name);
+		objects.put("center", center);
+		objects.put("radius", radius);
+		objects.put("spawns", spawns);
+		return objects;
 	}
 
 }
