@@ -8,4 +8,15 @@ commands:
         usage: /<command> [args]
         aliases: [sg]
 permissions:
-    survivalgames.command
+    survivalgames.command:
+        description: Base permission
+        default: true
+    survivalgames.create:
+        description: Allows /sg create
+        default: op
+    survivalgames.delete:
+        description: Allows /sg delete
+        default: op
+    survivalgames.list:
+        description: Allows /sg list
+        default: true

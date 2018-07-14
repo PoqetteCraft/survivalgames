@@ -43,6 +43,7 @@ public class Game {
 
 	// Initialization constructor
 	public Game(Map m) {
+		status = Status.WAITING;
 		map = m;
 		activePlayers = new ArrayList<Player>();
 		inactivePlayers = new ArrayList<OfflinePlayer>();

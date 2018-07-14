@@ -21,6 +21,8 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		// Initialize the manager
 		gm = new GameManager(this, sm);
 
+		getLogger().info("Loaded " + gm.allGames().size() + " maps");
+
 		// Command stuff
 		getCommand("survivalgames").setExecutor(new BaseCommand(this));
 
@@ -33,5 +35,13 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		gm.shutdown(sm);
 
 		getLogger().info("Done!");
+	}
+
+	public SettingsManager getSM() {
+		return sm;
+	}
+
+	public GameManager getGM() {
+		return gm;
 	}
 }

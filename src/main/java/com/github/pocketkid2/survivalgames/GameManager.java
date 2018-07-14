@@ -34,4 +34,28 @@ public class GameManager {
 		sm.saveAllMaps(arenas);
 	}
 
+	public void addMap(Map m) {
+		games.add(new Game(m));
+	}
+
+	public void removeGame(Game g) {
+		if (games.contains(g)) {
+			g.stop();
+			games.remove(g);
+		}
+	}
+
+	public List<Game> allGames() {
+		return games;
+	}
+
+	public Game byName(String name) {
+		for (Game g : games) {
+			if (g.getMap().getName().equalsIgnoreCase(name)) {
+				return g;
+			}
+		}
+		return null;
+	}
+
 }

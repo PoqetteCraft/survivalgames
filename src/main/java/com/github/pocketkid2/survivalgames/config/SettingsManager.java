@@ -1,6 +1,5 @@
 package com.github.pocketkid2.survivalgames.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,18 +18,18 @@ public class SettingsManager {
 		map_config.saveDefaultConfig();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Map> loadAllMaps() {
-		List<String> names = main_config.getStringList("all-maps");
-
-		List<Map> arenas = new ArrayList<Map>();
-		for (String s : names) {
-			arenas.add(map_config.getConfig().getSerializable(s, Map.class));
-		}
-		return arenas;
+		// Grab changes from disk
+		map_config.reloadConfig();
+		// Read list
+		return (List<Map>) map_config.getConfig().getList("all-maps");
 	}
 
 	public void saveAllMaps(List<Map> arenas) {
+		// Save list
 		map_config.getConfig().set("all-maps", arenas);
+		// Save changes to disk
 		map_config.saveConfig();
 	}
 
