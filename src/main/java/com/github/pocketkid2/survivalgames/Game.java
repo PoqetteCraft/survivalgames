@@ -168,16 +168,22 @@ public class Game {
 	public void stop() {
 		switch (status) {
 		case DISABLED:
-		case WAITING:
 		case RESETTING:
 			break;
+		case WAITING:
 		case IN_GAME:
 		case STARTING:
 			// Reset players
 			for (Player p : activePlayers.keySet()) {
 				leave(p, true, null);
 			}
-			// Reset blocks TODO
+			// Reset blocks
+			for (BlockState state : toReset) {
+				state.update(true, false);
+			}
+			// Clear both player lists
+			activePlayers.clear();
+			inactivePlayers.clear();
 			status = Status.WAITING;
 			break;
 		}
@@ -233,10 +239,6 @@ public class Game {
 			// Grab his save data and restore
 			SaveData sd = activePlayers.get(player);
 			sd.restore(player);
-
-			// Clear both player lists
-			activePlayers.clear();
-			inactivePlayers.clear();
 
 			// Tell the player he won
 			player.sendMessage(Messages.YOU_HAVE_WON);
@@ -316,7 +318,7 @@ public class Game {
 
 	/**
 	 * Adds this current block state to the list of blocks that need to be reset
-	 * 
+	 *
 	 * @param block
 	 */
 	public void queueBlock(Block block) {

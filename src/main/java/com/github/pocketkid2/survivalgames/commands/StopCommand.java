@@ -44,7 +44,7 @@ public class StopCommand extends SubCommand {
 			}
 		}
 		g.stop();
-		sender.sendMessage(Messages.GAME_STARTED(g.getMap().getName()));
+		sender.sendMessage(Messages.GAME_STOPPED(g.getMap().getName()));
 		return true;
 	}
 

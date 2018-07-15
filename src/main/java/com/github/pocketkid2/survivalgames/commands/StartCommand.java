@@ -43,7 +43,7 @@ public class StartCommand extends SubCommand {
 				return true;
 			}
 		}
-		g.start();
+		g.countdown(10);
 		sender.sendMessage(Messages.GAME_STARTED(g.getMap().getName()));
 		return true;
 	}

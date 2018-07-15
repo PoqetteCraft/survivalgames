@@ -2,6 +2,7 @@ package com.github.pocketkid2.survivalgames;
 
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.pocketkid2.survivalgames.commands.BaseCommand;
 import com.github.pocketkid2.survivalgames.config.SettingsManager;
@@ -23,12 +24,6 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		// Initialize config manager
 		sm = new SettingsManager(this);
 
-		// Initialize game manager
-		gm = new GameManager(this, sm);
-
-		// Notify how many arenas were loaded from file
-		getLogger().info("Loaded " + gm.allGames().size() + " maps");
-
 		// Register base command
 		getCommand("survivalgames").setExecutor(new BaseCommand(this));
 
@@ -36,6 +31,9 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MoveListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
+
+		// Prepare loading task
+		new LoadTask(this).runTaskLater(this, 20);
 
 		getLogger().info("Done!");
 	}
@@ -46,6 +44,29 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		gm.shutdown(sm);
 
 		getLogger().info("Done!");
+	}
+
+	private class LoadTask extends BukkitRunnable {
+
+		private SurvivalGamesPlugin plugin;
+
+		public LoadTask(SurvivalGamesPlugin plugin) {
+			this.plugin = plugin;
+		}
+
+		@Override
+		public void run() {
+			plugin.loadMaps();
+		}
+
+	}
+
+	private void loadMaps() {
+		// Initialize game manager
+		gm = new GameManager(this, sm);
+
+		// Notify how many arenas were loaded from file
+		getLogger().info("Loaded " + gm.allGames().size() + " maps");
 	}
 
 	// Getter
