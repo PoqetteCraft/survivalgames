@@ -20,3 +20,15 @@ permissions:
     survivalgames.list:
         description: Allows /sg list
         default: true
+    survivalgames.join:
+        description: Allows /sg join
+        default: true
+    survivalgames.leave:
+        description: Allows /sg leave
+        default: true
+    survivalgames.addspawn:
+        description: Allows /sg addspawn
+        default: op
+    survivalgames.info:
+        description: Allows /sg info
+        default: true

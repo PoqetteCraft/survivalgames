@@ -14,7 +14,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		// Configuration stuff
-		ConfigurationSerialization.registerClass(Map.class, "arena");
+		ConfigurationSerialization.registerClass(Arena.class, "arena");
 		saveDefaultConfig();
 		sm = new SettingsManager(this, getConfig());
 

@@ -21,10 +21,12 @@ public class BaseCommand implements CommandExecutor {
 		subCommands = new ArrayList<SubCommand>();
 
 		subCommands.add(new CreateCommand(plugin));
-
 		subCommands.add(new DeleteCommand(plugin));
-
 		subCommands.add(new ListCommand(plugin));
+		subCommands.add(new JoinCommand(plugin));
+		subCommands.add(new LeaveCommand(plugin));
+		subCommands.add(new AddSpawnCommand(plugin));
+		subCommands.add(new InfoCommand(plugin));
 	}
 
 	@Override

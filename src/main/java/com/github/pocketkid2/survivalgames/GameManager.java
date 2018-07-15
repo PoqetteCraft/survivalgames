@@ -3,6 +3,8 @@ package com.github.pocketkid2.survivalgames;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.Player;
+
 import com.github.pocketkid2.survivalgames.config.SettingsManager;
 
 public class GameManager {
@@ -12,10 +14,10 @@ public class GameManager {
 	public GameManager(SurvivalGamesPlugin plugin, SettingsManager sm) {
 		games = new ArrayList<Game>();
 
-		List<Map> arenas = sm.loadAllMaps();
+		List<Arena> arenas = sm.loadAllMaps();
 
-		for (Map m : arenas) {
-			games.add(new Game(m));
+		for (Arena m : arenas) {
+			games.add(new Game(this, m));
 		}
 	}
 
@@ -25,7 +27,7 @@ public class GameManager {
 			g.stop();
 		}
 
-		List<Map> arenas = new ArrayList<Map>();
+		List<Arena> arenas = new ArrayList<Arena>();
 
 		for (Game g : games) {
 			arenas.add(g.getMap());
@@ -34,8 +36,8 @@ public class GameManager {
 		sm.saveAllMaps(arenas);
 	}
 
-	public void addMap(Map m) {
-		games.add(new Game(m));
+	public void addMap(Arena m) {
+		games.add(new Game(this, m));
 	}
 
 	public void removeGame(Game g) {
@@ -56,6 +58,24 @@ public class GameManager {
 			}
 		}
 		return null;
+	}
+
+	public Game byPlayer(Player player) {
+		for (Game g : games) {
+			if (g.isInGame(player)) {
+				return g;
+			}
+		}
+		return null;
+	}
+
+	public boolean isInGame(Player p) {
+		for (Game g : games) {
+			if (g.isInGame(p)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

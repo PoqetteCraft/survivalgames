@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.pocketkid2.survivalgames.Map;
+import com.github.pocketkid2.survivalgames.Arena;
 import com.github.pocketkid2.survivalgames.Messages;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 import com.github.pocketkid2.survivalgames.Values;
@@ -53,7 +53,7 @@ public class CreateCommand extends SubCommand {
 				return true;
 			}
 
-			plugin.getGM().addMap(new Map(name, loc, radius));
+			plugin.getGM().addMap(new Arena(name, loc, radius));
 
 			sender.sendMessage(Messages.CREATED_MAP(name, radius));
 		} else {

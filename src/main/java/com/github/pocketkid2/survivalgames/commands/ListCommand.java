@@ -29,7 +29,7 @@ public class ListCommand extends SubCommand {
 		sender.sendMessage(Messages.LIST_NUM_GAMES(count));
 
 		for (Game g : plugin.getGM().allGames()) {
-			sender.sendMessage(Messages.LIST_GAME_NAME(g.getMap().getName(), g.getMap().getRadius()));
+			sender.sendMessage(Messages.LIST_GAME_NAME(g.getMap().getName(), g.getStatus()));
 		}
 
 		return true;

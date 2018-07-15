@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 // Represents a physical map region for a game
-public class Map implements ConfigurationSerializable {
+public class Arena implements ConfigurationSerializable {
 
 	// Each map has a name
 	private String name;
@@ -24,7 +24,7 @@ public class Map implements ConfigurationSerializable {
 	private List<Location> spawns;
 
 	// Base constructor
-	public Map(String name, Location center, int radius) {
+	public Arena(String name, Location center, int radius) {
 		this.name = name;
 		this.center = center;
 		this.radius = radius;
@@ -33,7 +33,7 @@ public class Map implements ConfigurationSerializable {
 
 	// Serialization constructor
 	@SuppressWarnings("unchecked")
-	public Map(java.util.Map<String, Object> objects) {
+	public Arena(java.util.Map<String, Object> objects) {
 		name = (String) objects.get("name");
 		center = (Location) objects.get("center");
 		radius = (int) objects.get("radius");
