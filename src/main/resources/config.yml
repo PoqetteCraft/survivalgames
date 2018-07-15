@@ -1,3 +1,31 @@
 # -------------------------------------
 # Configuration file for Survival Games
 # -------------------------------------
+
+# Global arena settings
+global:
+    
+    # A list of all material types that are allowed to be broken
+    allowed-blocks:
+     - 18   # Leaves (first four types)
+     - 31   # Tall grass
+     - 30   # Cobweb
+     - 32   # Dead bush
+     - 37   # Yellow flower
+     - 38   # Buncha flowers
+     - 39   # Brown mushroom
+     - 40   # Red mushroom
+     - 50   # Torch
+     - 51   # Fire
+     - 59   # Wheat
+     - 83   # Sugarcane
+     - 86   # Pumpkin
+     - 102  # Glass pane
+     - 103  # Melon
+     - 106  # Vines
+     - 111  # Lily pad
+     - 127  # Cocoa pod
+     - 141  # Carrots
+     - 142  # Potatoes
+     - 161  # Leaves (last two types)
+     - 175  # Double height plants

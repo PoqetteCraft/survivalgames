@@ -7,20 +7,19 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-// Represents a physical map region for a game
+/**
+ * Used to represent the physical map region and anything specific to a map that
+ * must be saved to disk.
+ * 
+ * @author Adam
+ *
+ */
 public class Arena implements ConfigurationSerializable {
 
-	// Each map has a name
+	// The essential details that define an arena
 	private String name;
-
-	// The center of the map (should be player-accessible, this will be the default
-	// spectator spawnpoint)
 	private Location center;
-
-	// The square radius of the map from the center
 	private int radius;
-
-	// A list of all the player spawn-points
 	private List<Location> spawns;
 
 	// Base constructor
@@ -44,7 +43,7 @@ public class Arena implements ConfigurationSerializable {
 	 * Checks if this map contains a location
 	 *
 	 * @param loc The location to check
-	 * @return true if the location is inside this map region
+	 * @return true if the location is inside this arena
 	 */
 	public boolean contains(Location loc) {
 
@@ -53,52 +52,41 @@ public class Arena implements ConfigurationSerializable {
 			return false;
 		}
 
-		// We should only check the horizontal coordinates because regions are
+		// We should only check the horizontal block coordinates because regions are
 		// top-to-bottom
 		if (Math.abs(loc.getBlockX() - center.getBlockX()) > radius) {
 			return false;
 		} else if (Math.abs(loc.getBlockZ() - center.getBlockZ()) > radius) {
 			return false;
-		} else {
-			return true;
 		}
+
+		// If we get down here we know it must be inside
+		return true;
 	}
 
-	/**
-	 * Add this spawn to the list
-	 *
-	 * @param loc The spawn location to add
-	 */
+	// Add a new location to the spawn list
 	public void addSpawn(Location loc) {
 		if (contains(loc)) {
 			spawns.add(loc);
 		}
 	}
 
-	/**
-	 * @return the name
-	 */
+	// Getter
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @return the center
-	 */
+	// Getter
 	public Location getCenter() {
 		return center;
 	}
 
-	/**
-	 * @return the radius
-	 */
+	// Getter
 	public int getRadius() {
 		return radius;
 	}
 
-	/**
-	 * @return the spawns
-	 */
+	// Getter
 	public List<Location> getSpawns() {
 		return spawns;
 	}
@@ -110,6 +98,7 @@ public class Arena implements ConfigurationSerializable {
 	 * @return The location or null if index is invalid
 	 */
 	public Location getSpawnByIndex(int index) {
+		// Do some bounds checking
 		if ((index < 0) || (index >= spawns.size())) {
 			return null;
 		} else {
@@ -117,6 +106,7 @@ public class Arena implements ConfigurationSerializable {
 		}
 	}
 
+	// Required as part of the ConfigurationSerializable interface
 	@Override
 	public java.util.Map<String, Object> serialize() {
 		java.util.Map<String, Object> objects = new HashMap<String, Object>();

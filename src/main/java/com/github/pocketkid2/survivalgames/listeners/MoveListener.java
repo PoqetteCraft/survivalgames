@@ -17,6 +17,13 @@ public class MoveListener implements Listener {
 		plugin = pl;
 	}
 
+	/**
+	 * Returns true if the two locations are inside different blocks
+	 *
+	 * @param loc1
+	 * @param loc2
+	 * @return
+	 */
 	private boolean blockLocationDiffer(Location loc1, Location loc2) {
 		if (loc1.getBlockX() != loc2.getBlockX()) {
 			return true;
@@ -30,14 +37,21 @@ public class MoveListener implements Listener {
 		return false;
 	}
 
+	/*
+	 * Check that a player moved off their square
+	 */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
+
 		// If the player is in-game
 		if (plugin.getGM().isInGame(event.getPlayer())) {
+
 			// Grab the status
 			Status status = plugin.getGM().byPlayer(event.getPlayer()).getStatus();
+
 			// If the players are supposed to be staying on the pedestal
 			if ((status == Game.Status.WAITING) || (status == Game.Status.STARTING)) {
+
 				// If the player is actually changing block
 				if (blockLocationDiffer(event.getTo(), event.getFrom())) {
 					event.setCancelled(true);

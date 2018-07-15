@@ -16,20 +16,23 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		// Configuration stuff
-		ConfigurationSerialization.registerClass(Arena.class, "arena");
-		saveDefaultConfig();
-		sm = new SettingsManager(this, getConfig());
 
-		// Initialize the manager
+		// Register serializable object
+		ConfigurationSerialization.registerClass(Arena.class, "arena");
+
+		// Initialize config manager
+		sm = new SettingsManager(this);
+
+		// Initialize game manager
 		gm = new GameManager(this, sm);
 
+		// Notify how many arenas were loaded from file
 		getLogger().info("Loaded " + gm.allGames().size() + " maps");
 
-		// Command stuff
+		// Register base command
 		getCommand("survivalgames").setExecutor(new BaseCommand(this));
 
-		// Listener stuff
+		// Register listeners
 		getServer().getPluginManager().registerEvents(new MoveListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
@@ -39,16 +42,18 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		// Save configuration stuff
+		// Stop all games and save to file
 		gm.shutdown(sm);
 
 		getLogger().info("Done!");
 	}
 
+	// Getter
 	public SettingsManager getSM() {
 		return sm;
 	}
 
+	// Getter
 	public GameManager getGM() {
 		return gm;
 	}
