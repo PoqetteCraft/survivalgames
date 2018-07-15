@@ -91,6 +91,7 @@ public class Game {
 		arena = m;
 		activePlayers = new HashMap<Player, SaveData>();
 		inactivePlayers = new ArrayList<OfflinePlayer>();
+		toReset = new ArrayList<BlockState>();
 	}
 
 	// Getter
@@ -175,7 +176,7 @@ public class Game {
 		case STARTING:
 			// Reset players
 			for (Player p : activePlayers.keySet()) {
-				leave(p, true, null);
+				leave(p, true, "");
 			}
 			// Reset blocks
 			for (BlockState state : toReset) {
