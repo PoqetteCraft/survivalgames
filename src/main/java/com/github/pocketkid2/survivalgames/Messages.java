@@ -21,6 +21,8 @@ public interface Messages {
 	String NOT_IN_GAME = ChatColor.RED + "You are not in a game!";
 	String LEFT_GAME = ChatColor.AQUA + "You have left the game!";
 	String SPAWN_ADDED = ChatColor.AQUA + "Spawn added!";
+	String GAMES_BEGIN = ChatColor.AQUA + "Let the games begin!";
+	String YOU_HAVE_WON = ChatColor.AQUA + "You have won the Survival Games!";
 
 	static String USAGE(String label, String sub, String args) {
 		return String.format(ChatColor.AQUA + "/%s %s %s", label, sub, args);
@@ -54,5 +56,44 @@ public interface Messages {
 				String.format(ChatColor.AQUA + "Status: %s", g.getStatus().getReadable()),
 				String.format(ChatColor.AQUA + "Players: " + ChatColor.LIGHT_PURPLE + "%d/%d", g.getAlive().size(),
 						g.getMap().getSpawns().size()) };
+	}
+
+	static String GAME_STARTED(String name) {
+		return String.format(ChatColor.AQUA + "Game " + ChatColor.GOLD + "%s" + ChatColor.AQUA + " has been started!",
+				name);
+	}
+
+	static String GAME_STOPPED(String name) {
+		return String.format(ChatColor.AQUA + "Game " + ChatColor.GOLD + "%s" + ChatColor.AQUA + " has been stopped!",
+				name);
+	}
+
+	static String GAME_STARTING_IN(int seconds) {
+		return String.format(
+				ChatColor.AQUA + "Game will be starting in " + ChatColor.GOLD + "%d" + ChatColor.AQUA + " seconds!",
+				seconds);
+	}
+
+	static String PLAYER_LEFT_GAME(String name) {
+		return String.format(ChatColor.AQUA + "Player " + ChatColor.YELLOW + "%s" + ChatColor.AQUA + " left the game!",
+				name);
+	}
+
+	static String KILLED_BY(String name) {
+		return String.format(ChatColor.AQUA + "You were killed by " + ChatColor.RED + "%s", name);
+	}
+
+	static String PLAYER_KILLED(String name, String name2) {
+		return String.format(ChatColor.YELLOW + "%s" + ChatColor.AQUA + " was killed by " + ChatColor.RED + "%s", name,
+				name2);
+	}
+
+	static String X_PLAYERS_LEFT(int size) {
+		return String.format(ChatColor.GOLD + "%d" + ChatColor.AQUA + " players left!", size);
+	}
+
+	static String PLAYER_HAS_WON(String name, String name2) {
+		return String.format(ChatColor.GOLD + "" + ChatColor.BOLD + "%s" + ChatColor.AQUA
+				+ " has won the Survival Games on map " + ChatColor.BLUE + ChatColor.ITALIC + "%s", name, name2);
 	}
 }

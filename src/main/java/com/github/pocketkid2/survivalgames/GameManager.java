@@ -9,15 +9,19 @@ import com.github.pocketkid2.survivalgames.config.SettingsManager;
 
 public class GameManager {
 
+	private SurvivalGamesPlugin plugin;
+
 	private List<Game> games;
 
-	public GameManager(SurvivalGamesPlugin plugin, SettingsManager sm) {
+	public GameManager(SurvivalGamesPlugin pl, SettingsManager sm) {
+		plugin = pl;
+
 		games = new ArrayList<Game>();
 
 		List<Arena> arenas = sm.loadAllMaps();
 
 		for (Arena m : arenas) {
-			games.add(new Game(this, m));
+			games.add(new Game(plugin, this, m));
 		}
 	}
 
@@ -37,7 +41,7 @@ public class GameManager {
 	}
 
 	public void addMap(Arena m) {
-		games.add(new Game(this, m));
+		games.add(new Game(plugin, this, m));
 	}
 
 	public void removeGame(Game g) {

@@ -32,3 +32,9 @@ permissions:
     survivalgames.info:
         description: Allows /sg info
         default: true
+    survivalgames.start:
+        description: Allows /sg start
+        default: op
+    survivalgames.stop:
+        description: Allows /sg stop
+        default: op

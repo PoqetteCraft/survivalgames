@@ -7,11 +7,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 
 // Represents an automated game
 public class Game {
@@ -39,10 +40,18 @@ public class Game {
 
 		private ItemStack[] contents;
 		private Location loc;
+		private GameMode gm;
 
-		public SaveData(PlayerInventory inv, Location loc) {
-			contents = inv.getContents();
-			this.loc = loc;
+		public SaveData(Player player) {
+			contents = player.getInventory().getContents();
+			loc = player.getLocation();
+			gm = player.getGameMode();
+		}
+
+		public void restore(Player player) {
+			player.teleport(loc);
+			player.setGameMode(gm);
+			player.getInventory().setContents(contents);
 		}
 
 		public ItemStack[] getInvContents() {
@@ -53,7 +62,13 @@ public class Game {
 			return loc;
 		}
 
+		public GameMode getGameMode() {
+			return gm;
+		}
+
 	}
+
+	private SurvivalGamesPlugin plugin;
 
 	// Reference to manager
 	private GameManager gm;
@@ -71,7 +86,7 @@ public class Game {
 	private List<OfflinePlayer> inactivePlayers;
 
 	// Initialization constructor
-	public Game(GameManager gameManager, Arena m) {
+	public Game(SurvivalGamesPlugin plugin, GameManager gameManager, Arena m) {
 		gm = gameManager;
 		status = Status.WAITING;
 		arena = m;
@@ -115,7 +130,7 @@ public class Game {
 				if (activePlayers.size() < arena.getSpawns().size()) {
 					Location spawn = arena.getSpawnByIndex(activePlayers.size());
 					// Grab them and their previous location
-					activePlayers.put(p, new SaveData(p.getInventory(), p.getLocation()));
+					activePlayers.put(p, new SaveData(p));
 					// Find that spawn
 					p.teleport(spawn);
 					// Tell the player
@@ -135,24 +150,102 @@ public class Game {
 	 */
 	public void stop() {
 		status = Status.RESETTING;
-		// TODO reset players
+		// Reset players
+		for (Player p : activePlayers.keySet()) {
+			leave(p, true, null);
+		}
 		// TODO reset blocks
 		status = Status.WAITING;
 	}
 
 	/**
-	 * A player voluntarily exiting the match
+	 * Player leaves the game, voluntary or not
 	 *
-	 * @param player
+	 * @param player    The player
+	 * @param voluntary True if they were not killed, false if they were killed
+	 * @param killer    If killed, who did it
 	 */
-	public void leave(Player player) {
+	public void leave(Player player, boolean voluntary, Player killer) {
 		if (activePlayers.containsKey(player)) {
 			SaveData sd = activePlayers.get(player);
+			sd.restore(player);
 			activePlayers.remove(player);
-			player.teleport(sd.getLoc());
-			player.getInventory().setContents(sd.getInvContents());
 			inactivePlayers.add(player);
-			player.sendMessage(Messages.LEFT_GAME);
+
+			if (voluntary) {
+				player.sendMessage(Messages.LEFT_GAME);
+				broadcast(Messages.PLAYER_LEFT_GAME(player.getName()));
+			} else {
+				player.sendMessage(Messages.KILLED_BY(killer.getName()));
+				broadcast(Messages.PLAYER_KILLED(player.getName(), killer.getName()));
+			}
+
+			if (activePlayers.size() > 1) {
+				// Broadcast current count
+				broadcast(Messages.X_PLAYERS_LEFT(activePlayers.size()));
+			} else {
+				// The game is over
+				endGame();
+			}
+
+		}
+	}
+
+	private void endGame() {
+		if (activePlayers.size() == 1) {
+			Player player = (Player) activePlayers.keySet().toArray()[0];
+			SaveData sd = activePlayers.get(player);
+			sd.restore(player);
+			activePlayers.clear();
+			inactivePlayers.clear();
+			player.sendMessage(Messages.YOU_HAVE_WON);
+			plugin.getServer().broadcastMessage(Messages.PLAYER_HAS_WON(player.getName(), arena.getName()));
+			stop();
+		}
+	}
+
+	private void broadcast(String message) {
+		for (Player p : activePlayers.keySet()) {
+			p.sendMessage(message);
+		}
+	}
+
+	private class CountdownTask extends BukkitRunnable {
+
+		private int seconds;
+		private Game g;
+
+		CountdownTask(Game g, int seconds) {
+			this.seconds = seconds;
+		}
+
+		@Override
+		public void run() {
+			if (seconds > 0) {
+				g.broadcast(Messages.GAME_STARTING_IN(seconds));
+				seconds--;
+			} else {
+				g.broadcast(Messages.GAMES_BEGIN);
+				g.start();
+				cancel();
+			}
+		}
+
+	}
+
+	public void countdown(int seconds) {
+		if (status == Status.WAITING) {
+			status = Status.STARTING;
+			new CountdownTask(this, seconds).runTaskTimer(plugin, 0, 20);
+		}
+	}
+
+	/**
+	 * Starts the game
+	 */
+	public void start() {
+		if (status == Status.STARTING) {
+			status = Status.IN_GAME;
 		}
 	}
 }

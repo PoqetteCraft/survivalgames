@@ -27,6 +27,8 @@ public class BaseCommand implements CommandExecutor {
 		subCommands.add(new LeaveCommand(plugin));
 		subCommands.add(new AddSpawnCommand(plugin));
 		subCommands.add(new InfoCommand(plugin));
+		subCommands.add(new StartCommand(plugin));
+		subCommands.add(new StopCommand(plugin));
 	}
 
 	@Override
