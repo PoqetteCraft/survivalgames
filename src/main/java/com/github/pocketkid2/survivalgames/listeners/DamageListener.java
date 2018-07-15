@@ -4,6 +4,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.github.pocketkid2.survivalgames.Game;
@@ -25,7 +26,10 @@ public class DamageListener implements Listener {
 				if (player.getHealth() <= event.getFinalDamage()) {
 					event.setCancelled(true);
 					Game g = plugin.getGM().byPlayer(player);
-					g.leave(player, false, event.getCause());
+					g.leave(player, false,
+							(event instanceof EntityDamageByEntityEvent)
+									? ((Player) ((EntityDamageByEntityEvent) event).getEntity()).getName()
+									: (event.getCause().toString()));
 				}
 			}
 		}

@@ -165,7 +165,7 @@ public class Game {
 	 * @param voluntary True if they were not killed, false if they were killed
 	 * @param killer    If killed, who did it
 	 */
-	public void leave(Player player, boolean voluntary, Player killer) {
+	public void leave(Player player, boolean voluntary, String killer) {
 		if (activePlayers.containsKey(player)) {
 			SaveData sd = activePlayers.get(player);
 			sd.restore(player);
@@ -176,8 +176,8 @@ public class Game {
 				player.sendMessage(Messages.LEFT_GAME);
 				broadcast(Messages.PLAYER_LEFT_GAME(player.getName()));
 			} else {
-				player.sendMessage(Messages.KILLED_BY(killer.getName()));
-				broadcast(Messages.PLAYER_KILLED(player.getName(), killer.getName()));
+				player.sendMessage(Messages.KILLED_BY(killer));
+				broadcast(Messages.PLAYER_KILLED(player.getName(), killer));
 			}
 
 			if (activePlayers.size() > 1) {

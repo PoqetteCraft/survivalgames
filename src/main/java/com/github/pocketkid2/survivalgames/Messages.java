@@ -80,11 +80,11 @@ public interface Messages {
 	}
 
 	static String KILLED_BY(String name) {
-		return String.format(ChatColor.AQUA + "You were killed by " + ChatColor.RED + "%s", name);
+		return String.format(ChatColor.AQUA + "You were killed by " + ChatColor.GRAY + "%s", name);
 	}
 
 	static String PLAYER_KILLED(String name, String name2) {
-		return String.format(ChatColor.YELLOW + "%s" + ChatColor.AQUA + " was killed by " + ChatColor.RED + "%s", name,
+		return String.format(ChatColor.YELLOW + "%s" + ChatColor.AQUA + " was killed by " + ChatColor.GRAY + "%s", name,
 				name2);
 	}
 
