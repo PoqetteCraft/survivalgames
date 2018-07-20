@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.github.pocketkid2.survivalgames.commands.BaseCommand;
 import com.github.pocketkid2.survivalgames.config.SettingsManager;
 import com.github.pocketkid2.survivalgames.listeners.BlockListener;
+import com.github.pocketkid2.survivalgames.listeners.ChestListener;
 import com.github.pocketkid2.survivalgames.listeners.DamageListener;
 import com.github.pocketkid2.survivalgames.listeners.MoveListener;
 import com.github.pocketkid2.survivalgames.listeners.PlayerListener;
@@ -71,6 +72,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+		getServer().getPluginManager().registerEvents(new ChestListener(this), this);
 	}
 
 	// Getter

@@ -86,6 +86,7 @@ public class Game {
 	private Map<Player, SaveData> activePlayers;
 	private List<OfflinePlayer> inactivePlayers;
 	private List<BlockState> toReset;
+	private List<Block> chests;
 
 	// Initialization constructor
 	public Game(SurvivalGamesPlugin plugin, GameManager gameManager, Arena m) {
@@ -96,6 +97,7 @@ public class Game {
 		activePlayers = new HashMap<Player, SaveData>();
 		inactivePlayers = new ArrayList<OfflinePlayer>();
 		toReset = new ArrayList<BlockState>();
+		chests = new ArrayList<Block>();
 		log("Loaded!");
 	}
 
@@ -211,6 +213,8 @@ public class Game {
 			for (BlockState state : toReset) {
 				state.update(true, false);
 			}
+			// Reset chests
+			chests.clear();
 			// Clear both player lists
 			activePlayers.clear();
 			inactivePlayers.clear();
@@ -361,5 +365,21 @@ public class Game {
 	 */
 	public void queueBlock(Block block) {
 		toReset.add(block.getState());
+	}
+
+	public List<Block> getChests() {
+		return chests;
+	}
+
+	public void addChest(Block chest) {
+		chests.add(chest);
+	}
+
+	public boolean isChest(Block chest) {
+		return chests.contains(chest);
+	}
+
+	public void clearChests() {
+		chests.clear();
 	}
 }

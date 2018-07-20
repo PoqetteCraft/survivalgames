@@ -1,17 +1,14 @@
 package com.github.pocketkid2.survivalgames.listeners;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 
-public class PlayerListener implements Listener {
+public class PlayerListener extends BaseListener {
 
-	private SurvivalGamesPlugin plugin;
-
-	public PlayerListener(SurvivalGamesPlugin plugin) {
-		this.plugin = plugin;
+	public PlayerListener(SurvivalGamesPlugin sgp) {
+		super(sgp);
 	}
 
 	@EventHandler

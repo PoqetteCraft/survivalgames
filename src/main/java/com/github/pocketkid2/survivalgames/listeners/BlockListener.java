@@ -2,7 +2,6 @@ package com.github.pocketkid2.survivalgames.listeners;
 
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDamageEvent;
@@ -12,12 +11,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import com.github.pocketkid2.survivalgames.Game;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 
-public class BlockListener implements Listener {
+public class BlockListener extends BaseListener {
 
-	private SurvivalGamesPlugin plugin;
-
-	public BlockListener(SurvivalGamesPlugin pl) {
-		plugin = pl;
+	public BlockListener(SurvivalGamesPlugin sgp) {
+		super(sgp);
 	}
 
 	/*

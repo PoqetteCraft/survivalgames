@@ -5,7 +5,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -13,12 +12,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import com.github.pocketkid2.survivalgames.Game;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 
-public class DamageListener implements Listener {
+public class DamageListener extends BaseListener {
 
-	private SurvivalGamesPlugin plugin;
-
-	public DamageListener(SurvivalGamesPlugin pl) {
-		plugin = pl;
+	public DamageListener(SurvivalGamesPlugin sgp) {
+		super(sgp);
 	}
 
 	/*

@@ -2,19 +2,16 @@ package com.github.pocketkid2.survivalgames.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.github.pocketkid2.survivalgames.Game;
 import com.github.pocketkid2.survivalgames.Game.Status;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 
-public class MoveListener implements Listener {
+public class MoveListener extends BaseListener {
 
-	private SurvivalGamesPlugin plugin;
-
-	public MoveListener(SurvivalGamesPlugin pl) {
-		plugin = pl;
+	public MoveListener(SurvivalGamesPlugin sgp) {
+		super(sgp);
 	}
 
 	/**
