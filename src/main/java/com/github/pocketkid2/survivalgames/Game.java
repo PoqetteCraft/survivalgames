@@ -58,12 +58,14 @@ public class Game {
 		private ItemStack[] contents;
 		private Location loc;
 		private GameMode gm;
+		private boolean isFlying;
 
 		// Constructs the save snapshot of the player at the current time
 		public SaveData(Player player) {
 			contents = player.getInventory().getContents();
 			loc = player.getLocation();
 			gm = player.getGameMode();
+			isFlying = player.isFlying();
 		}
 
 		// Restores the player's data to the data held in this object
@@ -71,6 +73,7 @@ public class Game {
 			player.teleport(loc);
 			player.setGameMode(gm);
 			player.getInventory().setContents(contents);
+			player.setFlying(isFlying);
 		}
 
 	}
@@ -86,12 +89,19 @@ public class Game {
 
 	// Initialization constructor
 	public Game(SurvivalGamesPlugin plugin, GameManager gameManager, Arena m) {
+		this.plugin = plugin;
 		gm = gameManager;
 		status = Status.WAITING;
 		arena = m;
 		activePlayers = new HashMap<Player, SaveData>();
 		inactivePlayers = new ArrayList<OfflinePlayer>();
 		toReset = new ArrayList<BlockState>();
+		log("Loaded!");
+	}
+
+	// Private logger
+	private void log(String message) {
+		plugin.getLogger().info(String.format("[%s] %s", getMap().getName(), message));
 	}
 
 	// Getter
@@ -151,8 +161,16 @@ public class Game {
 
 					// Prepare them for the game
 					player.teleport(spawn);
-					player.getInventory().clear();
+					prepare(player);
 					player.sendMessage(Messages.JOINED_GAME(arena.getName()));
+
+					// If we have enough players, start the game
+					int current = activePlayers.size();
+					int max = arena.getSpawns().size();
+					double percentFull = (double) current / (double) max;
+					if (percentFull >= plugin.getSM().getAutoStartThreshold()) {
+						countdown(plugin.getSM().getAutoStartTimer());
+					}
 				} else {
 					player.sendMessage(Messages.GAME_FULL);
 				}
@@ -161,6 +179,17 @@ public class Game {
 		} else {
 			player.sendMessage(Messages.ALREADY_IN_GAME);
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private void prepare(Player player) {
+		player.getInventory().clear();
+		player.setHealth(player.getMaxHealth());
+		player.setFoodLevel(20);
+		player.setExhaustion(0.0f);
+		player.setExp(0.0f);
+		player.setGameMode(GameMode.SURVIVAL);
+		// Probably much more
 	}
 
 	/**
@@ -186,6 +215,7 @@ public class Game {
 			activePlayers.clear();
 			inactivePlayers.clear();
 			status = Status.WAITING;
+			log("Stopped game");
 			break;
 		}
 	}
@@ -207,32 +237,37 @@ public class Game {
 
 			// Move from active to inactive players
 			activePlayers.remove(player);
-			inactivePlayers.add(player);
 
-			// If he died or left
-			if (voluntary) {
-				player.sendMessage(Messages.LEFT_GAME);
-				broadcast(Messages.PLAYER_LEFT_GAME(player.getName()));
-			} else {
-				player.sendMessage(Messages.KILLED_BY(killer));
-				broadcast(Messages.PLAYER_KILLED(player.getName(), killer));
+			// Do all this stuff if the game was actually started
+			if (getStatus() == Status.IN_GAME) {
+				inactivePlayers.add(player);
+
+				// If he died or left
+				if (voluntary) {
+					if (activePlayers.size() > 1) {
+						player.sendMessage(Messages.LEFT_GAME);
+						broadcast(Messages.PLAYER_LEFT_GAME(player.getName()));
+					}
+				} else {
+					player.sendMessage(Messages.KILLED_BY(killer));
+					broadcast(Messages.PLAYER_KILLED(player.getName(), killer));
+				}
+
+				// If the game is still going
+				if (activePlayers.size() > 1) {
+					// Broadcast current count
+					broadcast(Messages.X_PLAYERS_LEFT(activePlayers.size()));
+				} else {
+					// The game is over
+					endGame();
+				}
 			}
-
-			// If the game is still going
-			if (activePlayers.size() > 1) {
-				// Broadcast current count
-				broadcast(Messages.X_PLAYERS_LEFT(activePlayers.size()));
-			} else {
-				// The game is over
-				endGame();
-			}
-
 		}
 	}
 
 	private void endGame() {
 		// Only end if there is one player left
-		if (activePlayers.size() <= 1) {
+		if (activePlayers.size() == 1) {
 
 			// Grab that one player
 			Player player = (Player) activePlayers.keySet().toArray()[0];
@@ -304,6 +339,7 @@ public class Game {
 		if (status == Status.WAITING) {
 			status = Status.STARTING;
 			new CountdownTask(this, seconds).runTaskTimer(plugin, 0, 20);
+			log("Started countdown of " + seconds + " seconds");
 		}
 	}
 
@@ -314,6 +350,7 @@ public class Game {
 		if (status == Status.STARTING) {
 			status = Status.IN_GAME;
 			broadcast(Messages.GAMES_BEGIN);
+			log("Game started");
 		}
 	}
 

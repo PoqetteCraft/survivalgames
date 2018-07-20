@@ -38,3 +38,9 @@ permissions:
     survivalgames.stop:
         description: Allows /sg stop
         default: op
+    survivalgames.teleport:
+        description: Allows /sg tp
+        default: op
+    survivalgames.help:
+        description: Allows /sg help
+        default: true

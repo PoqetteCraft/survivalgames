@@ -50,8 +50,10 @@ public class DamageListener implements Listener {
 
 					// If they were killed by an entity
 					if (event instanceof EntityDamageByEntityEvent) {
+
 						// Grab that entity
-						Entity entity = ((EntityDamageByEntityEvent) event).getEntity();
+						EntityDamageByEntityEvent newEvent = ((EntityDamageByEntityEvent) event);
+						Entity entity = newEvent.getDamager();
 
 						// If it's a player
 						if (entity.getType() == EntityType.PLAYER) {

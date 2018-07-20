@@ -13,6 +13,8 @@ public class SettingsManager {
 	private SurvivalGamesPlugin plugin;
 	private ConfigAccessor map_config;
 	private List<Material> allowedBlocks;
+	private double autoStartThreshold;
+	private int autoStartTimer;
 
 	public SettingsManager(SurvivalGamesPlugin plugin) {
 		this.plugin = plugin;
@@ -31,6 +33,8 @@ public class SettingsManager {
 		for (Integer id : ids) {
 			allowedBlocks.add(Material.getMaterial(id));
 		}
+		autoStartThreshold = plugin.getConfig().getDouble("global.auto-start.threshold");
+		autoStartTimer = plugin.getConfig().getInt("global.auto-start.timer");
 	}
 
 	/**
@@ -59,7 +63,15 @@ public class SettingsManager {
 	}
 
 	public List<Material> allowedBlocks() {
-		return allowedBlocks();
+		return allowedBlocks;
+	}
+
+	public double getAutoStartThreshold() {
+		return autoStartThreshold;
+	}
+
+	public int getAutoStartTimer() {
+		return autoStartTimer;
 	}
 
 }

@@ -4,6 +4,13 @@
 
 # Global arena settings
 global:
+
+    # Auto-start settings
+    auto-start: 
+        # Threshold (percentage)
+        threshold: 0.5
+        # Timer (seconds)
+        timer: 60
     
     # A list of all material types that are allowed to be broken
     allowed-blocks:

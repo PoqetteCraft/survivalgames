@@ -29,6 +29,8 @@ public class BaseCommand implements CommandExecutor {
 		subCommands.add(new InfoCommand(plugin));
 		subCommands.add(new StartCommand(plugin));
 		subCommands.add(new StopCommand(plugin));
+		subCommands.add(new TeleportCommand(plugin));
+		subCommands.add(new HelpCommand(plugin, this));
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class BaseCommand implements CommandExecutor {
 
 		if (args.length == 0) {
 			// Show info
-			sender.sendMessage(Messages.PLACEHOLDER);
+			info(sender);
 		} else {
 			// Look through subcommands
 			for (SubCommand sc : subCommands) {
@@ -61,6 +63,7 @@ public class BaseCommand implements CommandExecutor {
 
 						// Try the command
 						if (!valid || !sc.execute(sender, args)) {
+							sender.sendMessage(Messages.INCORRECT_COMMAND_USAGE);
 							// If it fails, send the usage message
 							sender.sendMessage(String.format(Messages.USAGE(label, args[0], sc.getUsage())));
 						}
@@ -71,6 +74,20 @@ public class BaseCommand implements CommandExecutor {
 
 		return true;
 
+	}
+
+	/*
+	 * Send basic plugin info to the player on /sg with no arguments
+	 */
+	private void info(CommandSender sender) {
+		sender.sendMessage(Messages.INFO_PLUGIN_1(plugin.getDescription()));
+		sender.sendMessage(Messages.INFO_PLUGIN_2(plugin.getDescription()));
+		sender.sendMessage(Messages.INFO_PLUGIN_3(plugin.getGM()));
+		sender.sendMessage(Messages.INFO_HELP);
+	}
+
+	public List<SubCommand> getSubCommands() {
+		return subCommands;
 	}
 
 }
