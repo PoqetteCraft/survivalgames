@@ -33,10 +33,12 @@ public class HelpCommand extends SubCommand {
 			for (SubCommand sc : bc.getSubCommands()) {
 				for (String alias : sc.getAliases()) {
 					if (alias.equalsIgnoreCase(sub)) {
-						sender.sendMessage(Messages.COMMAND_HELP_FOR(alias));
-						sender.sendMessage(Messages.USAGE("sg", alias, sc.getUsage()));
-						sender.sendMessage(ChatColor.AQUA + sc.getDesc());
-						return true;
+						if (sender.hasPermission(sc.perm)) {
+							sender.sendMessage(Messages.COMMAND_HELP_FOR(alias));
+							sender.sendMessage(Messages.USAGE("sg", alias, sc.getUsage()));
+							sender.sendMessage(ChatColor.AQUA + sc.getDesc());
+							return true;
+						}
 					}
 				}
 			}

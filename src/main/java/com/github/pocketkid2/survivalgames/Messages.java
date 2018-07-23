@@ -26,6 +26,8 @@ public interface Messages {
 	String INFO_HELP = INFO() + "Type " + COMMAND("/sg help") + " to see a list of commands";
 	String COMMAND_NOT_FOUND = ERROR() + "That command name is invalid!";
 	String INCORRECT_COMMAND_USAGE = ERROR() + "Incorrect command usage!";
+	String MAX_SPAWNS_REACHED = ERROR() + "Maximum spawn count reached for this arena!";
+	String INVALID_SPAWN_INDEX = ERROR() + "Invalid spawn index!";
 
 	/*
 	 * Number chat formatting
@@ -88,7 +90,8 @@ public interface Messages {
 	}
 
 	static String CREATED_MAP(String name, int radius) {
-		return INFO() + "Created arena " + MAP(name) + " with radius " + NUMBER(radius) + " from your current location";
+		return INFO() + "Created arena " + MAP(name) + " with radius " + NUMBER(radius)
+				+ " from your current location";
 	}
 
 	static String MAP_REMOVED(String name) {
@@ -109,7 +112,8 @@ public interface Messages {
 
 	static String[] MAP_INFO(Game g) {
 		return new String[] { INFO() + "Name: " + MAP(g.getMap().getName()),
-				INFO() + "Radius: " + NUMBER(g.getMap().getRadius()), INFO() + "Status: " + g.getStatus().getReadable(),
+				INFO() + "Radius: " + NUMBER(g.getMap().getRadius()),
+				INFO() + "Status: " + g.getStatus().getReadable(),
 				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + g.getAlive().size() + "/"
 						+ g.getMap().getSpawns().size() };
 	}
@@ -173,4 +177,9 @@ public interface Messages {
 	static String SPAWN_ADDED(int size) {
 		return INFO() + "Added spawn " + NUMBER(size);
 	}
+
+	static String SPAWN_UPDATED(int index) {
+		return INFO() + "Update spawn " + NUMBER(index + 1);
+	}
+
 }

@@ -31,6 +31,7 @@ public class BaseCommand implements CommandExecutor {
 		subCommands.add(new StopCommand(plugin));
 		subCommands.add(new TeleportCommand(plugin));
 		subCommands.add(new HelpCommand(plugin, this));
+		subCommands.add(new SetSpawnCommand(plugin));
 	}
 
 	@Override
@@ -66,7 +67,8 @@ public class BaseCommand implements CommandExecutor {
 						if (!valid || !sc.execute(sender, args)) {
 							sender.sendMessage(Messages.INCORRECT_COMMAND_USAGE);
 							// If it fails, send the usage message
-							sender.sendMessage(String.format(Messages.USAGE(label, args[0], sc.getUsage())));
+							sender.sendMessage(
+									String.format(Messages.USAGE(label, args[0], sc.getUsage())));
 						}
 					}
 				}

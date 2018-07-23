@@ -2,13 +2,13 @@ package com.github.pocketkid2.survivalgames.commands;
 
 import java.util.Arrays;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.pocketkid2.survivalgames.Game;
 import com.github.pocketkid2.survivalgames.Messages;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
+import com.github.pocketkid2.survivalgames.Values;
 
 public class AddSpawnCommand extends SubCommand {
 
@@ -26,14 +26,18 @@ public class AddSpawnCommand extends SubCommand {
 	public boolean execute(CommandSender sender, String[] arguments) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			Location loc = player.getLocation();
 
-			Game g = plugin.getGM().byName(arguments[1]);
-			if (g == null) {
+			Game game = plugin.getGM().byName(arguments[1]);
+
+			if (game == null) {
 				player.sendMessage(Messages.MAP_DOESNT_EXIST);
 			} else {
-				g.getMap().addSpawn(loc);
-				player.sendMessage(Messages.SPAWN_ADDED(g.getMap().getSpawns().size()));
+				if (game.getMap().getSpawns().size() < Values.MAX_SPAWNS) {
+					game.getMap().addSpawn(player.getLocation());
+					player.sendMessage(Messages.SPAWN_ADDED(game.getMap().getSpawns().size()));
+				} else {
+					player.sendMessage(Messages.MAX_SPAWNS_REACHED);
+				}
 			}
 		} else {
 			sender.sendMessage(Messages.MUST_BE_PLAYER);
