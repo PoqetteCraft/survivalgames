@@ -1,0 +1,88 @@
+# -----------------------------------------
+#   Item Configuration for Survival Games
+# -----------------------------------------
+
+# Tier 1 (50% chance)
+1:
+    - 268   # Wooden sword
+    - 271   # Wooden axe
+    - 298   # Leather helmet
+    - 299   # Leather tunic
+    - 300   # Leather pants
+    - 301   # Leather boots
+    - 319   # Raw porkchop
+    - 349   # Raw fish
+    - 349   # Raw salmon
+    - 363   # Raw beef
+    - 365   # Raw chicken
+    - 411   # Raw rabbit
+    - 423   # Raw mutton
+    - 280   # Stick
+    - 263   # Coal
+    - 287   # String
+    - 318   # Flint
+    - 288   # Feather
+# Tier 2 (25% chance)
+2:
+    - 272   # Stone sword
+    - 275   # Stone axe
+    - 302   # Chainmail helmet
+    - 303   # Chainmail chestplate
+    - 304   # Chainmail leggings
+    - 305   # Chainmail boots
+    - 265   # Iron Ingot
+    - 262   # Arrow
+    - 260   # Apple
+    - 297   # Bread
+    - 357   # Cookie
+    - 391   # Carrot
+    - 392   # Potato
+    - 434   # Beetroot
+    - 360   # Watermelon
+    - 374   # Empty bottle
+    - 281   # Bowl
+    - 39    # Brown mushroom
+    - 40    # Red mushroom
+# Tier 3 (12.5% chance)
+3:
+    - 267   # Iron sword
+    - 258   # Iron axe
+    - 306   # Iron helmet
+    - 307   # Iron chestplate
+    - 308   # Iron leggings
+    - 309   # Iron boots
+    - 320   # Cooked porkchop
+    - 350   # Cooked fish
+    - 350   # Cooked salmon
+    - 364   # Steak
+    - 366   # Cooked chicken
+    - 412   # Cooked rabbit 
+    - 424   # Cooked mutton
+    - 261   # Bow
+# Tier 4 (6.25% chance)
+4:
+    - 283   # Gold sword
+    - 286   # Gold axe
+    - 314   # Gold helmet
+    - 315   # Gold chestplate
+    - 316   # Gold leggings
+    - 317   # Gold boots
+    - 264   # Diamond
+    - 322   # Golden apple
+    - 368   # Ender pearl
+    - 393   # Baked potato
+    - 396   # Golden carrot
+    - 400   # Pumpkin pie
+    - 442   # Shield
+    - 282   # Mushroom soup
+    - 413   # Rabbit stew
+    - 436   # Beetroot soup
+# Tier 5 (3.125% chance)
+5:
+    - 276   # Diamond sword
+    - 279   # Diamond axe
+    - 310   # Diamond helmet
+    - 311   # Diamond chestplate
+    - 312   # Diamond leggings
+    - 313   # Diamond boots
+    - 443   # Elytra

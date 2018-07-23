@@ -7,11 +7,13 @@ import org.bukkit.Material;
 
 import com.github.pocketkid2.survivalgames.Arena;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
+import com.github.pocketkid2.survivalgames.Values;
 
 public class SettingsManager {
 
 	private SurvivalGamesPlugin plugin;
 	private ConfigAccessor map_config;
+	private ConfigAccessor item_config;
 	private List<Material> allowedBlocks;
 	private double autoStartThreshold;
 	private int autoStartTimer;
@@ -19,8 +21,12 @@ public class SettingsManager {
 	public SettingsManager(SurvivalGamesPlugin plugin) {
 		this.plugin = plugin;
 		plugin.saveDefaultConfig();
+
 		map_config = new ConfigAccessor(plugin, "maps.yml");
 		map_config.saveDefaultConfig();
+
+		item_config = new ConfigAccessor(plugin, "items.yml");
+		item_config.saveDefaultConfig();
 
 		loadGlobalSettings();
 	}
@@ -35,6 +41,20 @@ public class SettingsManager {
 		}
 		autoStartThreshold = plugin.getConfig().getDouble("global.auto-start.threshold");
 		autoStartTimer = plugin.getConfig().getInt("global.auto-start.timer");
+	}
+
+	@SuppressWarnings("deprecation")
+	public List<Material> getItemsInTier(int tier) {
+		if ((tier >= Values.MIN_TIER) && (tier <= Values.MAX_TIER)) {
+			List<Integer> ints = item_config.getConfig().getIntegerList(Integer.toString(tier));
+			List<Material> mats = new ArrayList<Material>();
+			for (Integer i : ints) {
+				mats.add(Material.getMaterial(i));
+			}
+			return mats;
+		} else {
+			return null;
+		}
 	}
 
 	/**

@@ -16,6 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.github.pocketkid2.survivalgames.random.BinaryRandomCount;
+import com.github.pocketkid2.survivalgames.random.RandomIntSet;
+
 /**
  * Represents an automated game given a map loaded from disk (arena)
  *
@@ -87,6 +90,8 @@ public class Game {
 	private List<OfflinePlayer> inactivePlayers;
 	private List<BlockState> toReset;
 	private List<Block> chests;
+	private BinaryRandomCount brc;
+	private RandomIntSet ris;
 
 	// Initialization constructor
 	public Game(SurvivalGamesPlugin plugin, GameManager gameManager, Arena m) {
@@ -98,6 +103,8 @@ public class Game {
 		inactivePlayers = new ArrayList<OfflinePlayer>();
 		toReset = new ArrayList<BlockState>();
 		chests = new ArrayList<Block>();
+		brc = new BinaryRandomCount();
+		ris = new RandomIntSet();
 		log("Loaded!");
 	}
 
@@ -381,5 +388,19 @@ public class Game {
 
 	public void clearChests() {
 		chests.clear();
+	}
+
+	/**
+	 * @return the brc
+	 */
+	public BinaryRandomCount getBRC() {
+		return brc;
+	}
+
+	/**
+	 * @return the ris
+	 */
+	public RandomIntSet getRIS() {
+		return ris;
 	}
 }

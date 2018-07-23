@@ -1,5 +1,10 @@
 package com.github.pocketkid2.survivalgames.listeners;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -12,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.github.pocketkid2.survivalgames.Game;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
+import com.github.pocketkid2.survivalgames.Values;
 
 public class ChestListener extends BaseListener {
 
@@ -30,13 +36,47 @@ public class ChestListener extends BaseListener {
 					if (!game.isChest(block)) {
 						// Populate chest
 						Inventory inv = ((Chest) state).getBlockInventory();
-						inv.clear();
-						inv.addItem(new ItemStack(Material.IRON_SWORD));
-						// state.update(true, true);
+						populate(game, inv);
 						game.addChest(block);
 					}
 				}
 			}
+		}
+	}
+
+	/*
+	 * Populates the inventory with a new random selection of items
+	 */
+	private void populate(Game game, Inventory inv) {
+		// Reset the chest
+		inv.clear();
+
+		// First get a tier
+		int tier = game.getBRC().getCount(Values.MAX_TIER);
+
+		// Grab the possible values for that tier
+		List<Material> items = plugin.getSM().getItemsInTier(tier);
+
+		// Choose how many items from that list to pick
+		int numItems = game.getBRC().getCount(inv.getSize());
+
+		// Choose which indexes to choose
+		Set<Integer> choose = game.getRIS().getInts(numItems, items.size());
+
+		// Choose which items to use
+		List<Material> reduced = new LinkedList<Material>();
+		for (Integer i : choose) {
+			reduced.add(items.get(i)); // Subtract one because lists are indexed 0...size-1
+		}
+
+		// Now choose which inventory slots to put them in
+		Set<Integer> slots = game.getRIS().getInts(numItems, inv.getSize());
+
+		// Now fill those slots
+		Collections.shuffle(reduced);
+		for (Integer i : slots) {
+			inv.setItem(i, new ItemStack(reduced.get(0)));
+			reduced.remove(0);
 		}
 	}
 
