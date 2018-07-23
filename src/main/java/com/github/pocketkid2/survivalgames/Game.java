@@ -221,7 +221,7 @@ public class Game {
 				state.update(true, false);
 			}
 			// Reset chests
-			chests.clear();
+			resetChests();
 			// Clear both player lists
 			activePlayers.clear();
 			inactivePlayers.clear();
@@ -229,6 +229,13 @@ public class Game {
 			log("Stopped game");
 			break;
 		}
+	}
+
+	/**
+	 * Reset the chests
+	 */
+	private void resetChests() {
+		chests.clear();
 	}
 
 	/**

@@ -8,4 +8,7 @@ public interface Values {
 	int MIN_TIER = 1;
 	int MAX_TIER = 5;
 
+	int MIN_SPAWNS = 4;
+	int MAX_SPAWNS = 50;
+
 }

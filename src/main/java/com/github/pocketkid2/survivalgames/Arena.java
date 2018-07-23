@@ -10,7 +10,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 /**
  * Used to represent the physical map region and anything specific to a map that
  * must be saved to disk.
- * 
+ *
  * @author Adam
  *
  */
@@ -68,6 +68,13 @@ public class Arena implements ConfigurationSerializable {
 	public void addSpawn(Location loc) {
 		if (contains(loc)) {
 			spawns.add(loc);
+		}
+	}
+
+	// Override an existing spawn location
+	public void setSpawn(int index, Location loc) {
+		if ((index >= 0) && (index < spawns.size())) {
+			spawns.set(index, loc);
 		}
 	}
 

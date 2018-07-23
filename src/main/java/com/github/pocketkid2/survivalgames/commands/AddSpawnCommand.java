@@ -13,8 +13,7 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class AddSpawnCommand extends SubCommand {
 
 	public AddSpawnCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				1,
 				1,
 				Arrays.asList("addspawn"),
@@ -34,7 +33,7 @@ public class AddSpawnCommand extends SubCommand {
 				player.sendMessage(Messages.MAP_DOESNT_EXIST);
 			} else {
 				g.getMap().addSpawn(loc);
-				player.sendMessage(Messages.SPAWN_ADDED);
+				player.sendMessage(Messages.SPAWN_ADDED(g.getMap().getSpawns().size()));
 			}
 		} else {
 			sender.sendMessage(Messages.MUST_BE_PLAYER);

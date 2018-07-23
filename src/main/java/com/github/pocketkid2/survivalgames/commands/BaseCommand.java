@@ -35,6 +35,7 @@ public class BaseCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		sender.sendMessage("");
 		if (!sender.hasPermission("survivalgames.command")) {
 			sender.sendMessage(Messages.NO_PERM);
 			return true;

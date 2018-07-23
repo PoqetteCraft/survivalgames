@@ -7,68 +7,80 @@ import com.github.pocketkid2.survivalgames.Game.Status;
 
 public interface Messages {
 
-	String MUST_BE_PLAYER = ChatColor.RED + "You must be a player!";
-	String NO_PERM = ChatColor.RED + "You don't have permission for that!";
-	String PLACEHOLDER = ChatColor.AQUA + "Placeholder message";
-	String RADIUS_TOO_SMALL = ChatColor.RED + "That radius is too small!";
-	String RADIUS_TOO_LARGE = ChatColor.RED + "That radius is too large!";
-	String MAP_ALREADY_EXISTS = ChatColor.RED + "A map already exists with that name!";
-	String MAP_DOESNT_EXIST = ChatColor.RED + "That map does not exist!";
-	String ALREADY_IN_GAME = ChatColor.RED + "You are already in a game!";
-	String GAME_UNAVAILABLE = ChatColor.RED + "Sorry, that game is currently unavailable!";
-	String GAME_ALREADY_STARTED = ChatColor.RED + "Sorry, that game has already started!";
-	String GAME_RESETTING = ChatColor.RED + "Please wait a moment while the arena resets!";
-	String GAME_FULL = ChatColor.RED + "Sorry, that game is full!";
-	String NOT_IN_GAME = ChatColor.RED + "You are not in a game!";
-	String LEFT_GAME = ChatColor.AQUA + "You have left the game!";
-	String SPAWN_ADDED = ChatColor.AQUA + "Spawn added!";
-	String GAMES_BEGIN = ChatColor.AQUA + "Let the games begin!";
-	String YOU_HAVE_WON = ChatColor.AQUA + "You have won the Survival Games!";
-	String INFO_HELP = ChatColor.AQUA + "Type " + ChatColor.DARK_AQUA + "/sg help" + ChatColor.AQUA
-			+ " to see a list of commands";
-	String COMMAND_NOT_FOUND = ChatColor.RED + "That command name is invalid!";
-	String INCORRECT_COMMAND_USAGE = ChatColor.RED + "Incorrect command usage!";
+	String MUST_BE_PLAYER = ERROR() + "You must be a player!";
+	String NO_PERM = ERROR() + "You don't have permission for that!";
+	String PLACEHOLDER = INFO() + "Placeholder message";
+	String RADIUS_TOO_SMALL = ERROR() + "That radius is too small!";
+	String RADIUS_TOO_LARGE = ERROR() + "That radius is too large!";
+	String MAP_ALREADY_EXISTS = ERROR() + "A map already exists with that name!";
+	String MAP_DOESNT_EXIST = ERROR() + "That map does not exist!";
+	String ALREADY_IN_GAME = ERROR() + "You are already in a game!";
+	String GAME_UNAVAILABLE = ERROR() + "Sorry, that game is currently unavailable!";
+	String GAME_ALREADY_STARTED = ERROR() + "Sorry, that game has already started!";
+	String GAME_RESETTING = ERROR() + "Please wait a moment while the arena resets!";
+	String GAME_FULL = ERROR() + "Sorry, that game is full!";
+	String NOT_IN_GAME = ERROR() + "You are not in a game!";
+	String LEFT_GAME = INFO() + "You have left the game!";
+	String GAMES_BEGIN = INFO() + "Let the games begin!";
+	String YOU_HAVE_WON = INFO() + "You have won the Survival Games!";
+	String INFO_HELP = INFO() + "Type " + COMMAND("/sg help") + " to see a list of commands";
+	String COMMAND_NOT_FOUND = ERROR() + "That command name is invalid!";
+	String INCORRECT_COMMAND_USAGE = ERROR() + "Incorrect command usage!";
 
 	/*
 	 * Number chat formatting
 	 */
-	static String NUMBER(String name) {
-		return ChatColor.GOLD + name + ChatColor.AQUA;
+	static String NUMBER(int n) {
+		return ChatColor.GOLD + "" + n + INFO();
 	}
 
 	/*
 	 * Arena name chat formatting
 	 */
 	static String MAP(String name) {
-		return ChatColor.BLUE + "" + ChatColor.ITALIC + name + ChatColor.AQUA;
+		return ChatColor.BLUE + "" + ChatColor.ITALIC + name + INFO();
 	}
 
 	/*
 	 * Command chat formatting
 	 */
 	static String COMMAND(String name) {
-		return ChatColor.DARK_AQUA + name + ChatColor.AQUA;
+		return ChatColor.DARK_AQUA + name + INFO();
 	}
 
 	/*
 	 * Player killed/leaves chat formatting
 	 */
 	static String KILLED(String name) {
-		return ChatColor.YELLOW + name + ChatColor.AQUA;
+		return ChatColor.YELLOW + name + INFO();
 	}
 
 	/*
 	 * Killer chat formatting
 	 */
 	static String KILLER(String name) {
-		return ChatColor.GRAY + name + ChatColor.AQUA;
+		return ChatColor.GRAY + name + INFO();
 	}
 
 	/*
 	 * Winning player chat formatting
 	 */
 	static String WON(String name) {
-		return ChatColor.GOLD + "" + ChatColor.BOLD + name + ChatColor.AQUA;
+		return ChatColor.GOLD + "" + ChatColor.BOLD + name + INFO();
+	}
+
+	/*
+	 * Standard command color
+	 */
+	static String INFO() {
+		return ChatColor.AQUA + "";
+	}
+
+	/*
+	 * Standard error color
+	 */
+	static String ERROR() {
+		return ChatColor.RED + "";
 	}
 
 	static String USAGE(String label, String sub, String args) {
@@ -76,88 +88,89 @@ public interface Messages {
 	}
 
 	static String CREATED_MAP(String name, int radius) {
-		return String.format(ChatColor.AQUA + "Created arena " + MAP("%s") + " with radius " + NUMBER("%d")
-				+ " from your current location", name, radius);
+		return INFO() + "Created arena " + MAP(name) + " with radius " + NUMBER(radius) + " from your current location";
 	}
 
 	static String MAP_REMOVED(String name) {
-		return String.format(ChatColor.AQUA + "Arena " + MAP("%s") + " deleted", name);
+		return INFO() + "Arena " + MAP(name) + " deleted";
 	}
 
 	static String LIST_NUM_GAMES(int count) {
-		return String.format(ChatColor.AQUA + "There are " + NUMBER("%d") + " maps", count);
+		return INFO() + "There are " + NUMBER(count) + " maps";
 	}
 
 	static String LIST_GAME_NAME(String name, Status status) {
-		return String.format(ChatColor.AQUA + "Name: " + MAP("%s") + " Status: %s", name, status.getReadable());
+		return INFO() + "Name: " + MAP(name) + " Status: " + status.getReadable();
 	}
 
 	static String JOINED_GAME(String name) {
-		return String.format(ChatColor.AQUA + "Joined game " + MAP("%s"), name);
+		return INFO() + "Joined game " + MAP(name);
 	}
 
 	static String[] MAP_INFO(Game g) {
-		return new String[] { String.format(ChatColor.AQUA + "Name: " + MAP("%s"), g.getMap().getName()),
-				String.format(ChatColor.AQUA + "Radius: " + NUMBER("%d"), g.getMap().getRadius()),
-				String.format(ChatColor.AQUA + "Status: %s", g.getStatus().getReadable()),
-				String.format(ChatColor.AQUA + "Players: " + ChatColor.LIGHT_PURPLE + "%d/%d", g.getAlive().size(),
-						g.getMap().getSpawns().size()) };
+		return new String[] { INFO() + "Name: " + MAP(g.getMap().getName()),
+				INFO() + "Radius: " + NUMBER(g.getMap().getRadius()), INFO() + "Status: " + g.getStatus().getReadable(),
+				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + g.getAlive().size() + "/"
+						+ g.getMap().getSpawns().size() };
 	}
 
 	static String GAME_STARTED(String name) {
-		return String.format(ChatColor.AQUA + "Game " + MAP("%s") + " has been started!", name);
+		return INFO() + "Game " + MAP(name) + " has been started!";
 	}
 
 	static String GAME_STOPPED(String name) {
-		return String.format(ChatColor.AQUA + "Game " + MAP("%s") + ChatColor.AQUA + " has been stopped!", name);
+		return INFO() + "Game " + MAP(name) + " has been stopped!";
 	}
 
 	static String GAME_STARTING_IN(int seconds) {
-		return String.format(ChatColor.AQUA + "Game will be starting in " + NUMBER("%d") + " seconds!", seconds);
+		return INFO() + "Game will be starting in " + NUMBER(seconds) + " seconds!";
 	}
 
 	static String PLAYER_LEFT_GAME(String name) {
-		return String.format(ChatColor.AQUA + "Player " + KILLED("%s") + " left the game!", name);
+		return INFO() + "Player " + KILLED(name) + " left the game!";
 	}
 
 	static String KILLED_BY(String name) {
-		return String.format(ChatColor.AQUA + "You were killed by " + KILLER("%s"), name);
+		return INFO() + "You were killed by " + KILLER(name);
 	}
 
-	static String PLAYER_KILLED(String name, String name2) {
-		return String.format(KILLED("%s") + " was killed by " + KILLER("%s"), name, name2);
+	static String PLAYER_KILLED(String killed, String killer) {
+		return KILLED(killed) + " was killed by " + KILLER(killer);
 	}
 
 	static String X_PLAYERS_LEFT(int size) {
-		return String.format("There are " + NUMBER("%d") + " players left!", size);
+		return "There are " + NUMBER(size) + " players left!";
 	}
 
-	static String PLAYER_HAS_WON(String name, String name2) {
-		return String.format(WON("%s") + " has won the Survival Games on map " + MAP("%s"), name, name2);
+	static String PLAYER_HAS_WON(String player, String map) {
+		return WON(player) + " has won the Survival Games on map " + MAP(map);
 	}
 
 	static String INFO_PLUGIN_1(PluginDescriptionFile description) {
-		return String.format(ChatColor.AQUA + "%s version %s", description.getName(), description.getVersion());
+		return INFO() + description.getName() + " version " + description.getVersion();
 	}
 
 	static String INFO_PLUGIN_2(PluginDescriptionFile description) {
-		return String.format(ChatColor.AQUA + "Author: %s", description.getAuthors().get(0));
+		return INFO() + "Author: " + description.getAuthors().get(0);
 	}
 
 	static String INFO_PLUGIN_3(GameManager gm) {
-		return String.format(ChatColor.AQUA + "There are " + NUMBER("%d") + " maps loaded", gm.allGames().size());
+		return INFO() + "There are " + NUMBER(gm.allGames().size()) + " maps loaded";
 	}
 
 	static String COMMAND_LIST(int size) {
-		return String.format(ChatColor.AQUA + "There are " + NUMBER("%d") + " commands", size);
+		return INFO() + "There are " + NUMBER(size) + " commands";
 	}
 
 	static String COMMAND_HELP_FOR(String alias) {
-		return String.format(ChatColor.AQUA + "Command help for " + COMMAND("/sg %s"), alias);
+		return INFO() + "Command help for " + COMMAND("/sg " + alias);
 	}
 
 	static String MAP_HAS_PLAYERS(String name, int size) {
-		return String.format(ChatColor.AQUA + "Map " + MAP("%s") + " currently has " + NUMBER("%d") + " players", name,
-				size);
+		return INFO() + "Map " + MAP(name) + " currently has " + NUMBER(size) + " players";
+	}
+
+	static String SPAWN_ADDED(int size) {
+		return INFO() + "Added spawn " + NUMBER(size);
 	}
 }
