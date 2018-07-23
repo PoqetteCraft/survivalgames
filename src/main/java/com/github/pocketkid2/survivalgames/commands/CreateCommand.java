@@ -14,14 +14,13 @@ import com.github.pocketkid2.survivalgames.Values;
 public class CreateCommand extends SubCommand {
 
 	public CreateCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				2,
 				2,
 				Arrays.asList("create"),
 				"<name> <radius>",
 				"Creates a new map with the given name and given square radius from your current location",
-				"survivalgames.create");
+				"create");
 	}
 
 	@Override

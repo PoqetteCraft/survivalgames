@@ -12,14 +12,13 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class TeleportCommand extends SubCommand {
 
 	protected TeleportCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				1,
 				1,
 				Arrays.asList("teleport", "tp"),
 				"<name>",
 				"Teleport to the center of an arena",
-				"survivalgames.teleport");
+				"teleport");
 	}
 
 	@Override

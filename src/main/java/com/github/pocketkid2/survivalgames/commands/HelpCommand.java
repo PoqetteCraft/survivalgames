@@ -15,14 +15,13 @@ public class HelpCommand extends SubCommand {
 	private BaseCommand bc;
 
 	public HelpCommand(SurvivalGamesPlugin pl, BaseCommand bc) {
-		super(
-				pl,
+		super(pl,
 				0,
 				1,
 				Arrays.asList("help"),
 				"[command]",
 				"Show a list of commands or help for a specific command",
-				"survivalgames.help");
+				"help");
 		this.bc = bc;
 	}
 

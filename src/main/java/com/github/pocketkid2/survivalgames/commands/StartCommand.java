@@ -12,14 +12,13 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class StartCommand extends SubCommand {
 
 	protected StartCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				0,
 				1,
 				Arrays.asList("start"),
 				"[name]",
 				"Starts either your game or the game specified",
-				"survivalgames.start");
+				"start");
 	}
 
 	@Override

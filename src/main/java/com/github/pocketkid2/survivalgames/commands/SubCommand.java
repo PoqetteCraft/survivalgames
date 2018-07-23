@@ -23,7 +23,7 @@ public abstract class SubCommand {
 		aliases = a;
 		usage = u;
 		desc = d;
-		perm = p;
+		perm = "survivalgames." + p;
 	}
 
 	public abstract boolean execute(CommandSender sender, String[] arguments);

@@ -12,14 +12,13 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class StopCommand extends SubCommand {
 
 	protected StopCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				0,
 				1,
 				Arrays.asList("stop"),
 				"[name]",
 				"Stops the game specified or your game",
-				"survivalgames.stop");
+				"stop");
 	}
 
 	@Override

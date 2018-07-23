@@ -12,14 +12,13 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class JoinCommand extends SubCommand {
 
 	public JoinCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				1,
 				1,
 				Arrays.asList("join"),
 				"<name>",
 				"Attempts to join the game with the given name",
-				"survivalgames.join");
+				"join");
 	}
 
 	@Override

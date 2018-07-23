@@ -11,14 +11,7 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class InfoCommand extends SubCommand {
 
 	public InfoCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
-				1,
-				1,
-				Arrays.asList("info"),
-				"<name>",
-				"Shows information about a map",
-				"survivalgames.info");
+		super(pl, 1, 1, Arrays.asList("info"), "<name>", "Shows information about a map", "info");
 	}
 
 	@Override

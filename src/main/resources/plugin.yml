@@ -44,3 +44,6 @@ permissions:
     survivalgames.help:
         description: Allows /sg help
         default: true
+    survivalgames.setspawn:
+        description: Allows /sg setspawn
+        default: op

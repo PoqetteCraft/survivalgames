@@ -11,14 +11,13 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class DeleteCommand extends SubCommand {
 
 	public DeleteCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				1,
 				1,
 				Arrays.asList("delete"),
 				"<name>",
 				"Deletes a map with the given name",
-				"survivalgames.delete");
+				"delete");
 	}
 
 	@Override

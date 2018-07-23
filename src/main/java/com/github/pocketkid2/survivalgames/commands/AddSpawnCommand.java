@@ -19,7 +19,7 @@ public class AddSpawnCommand extends SubCommand {
 				Arrays.asList("addspawn"),
 				"<name>",
 				"Adds your current location to the spawn list of the given map",
-				"survivalgames.addspawn");
+				"addspawn");
 	}
 
 	@Override

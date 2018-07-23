@@ -13,14 +13,13 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class ListCommand extends SubCommand {
 
 	public ListCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
+		super(pl,
 				0,
 				1,
 				Arrays.asList("list"),
 				"[map]",
 				"List all maps or players in a map",
-				"survivalgames.list");
+				"list");
 	}
 
 	@Override
@@ -32,7 +31,8 @@ public class ListCommand extends SubCommand {
 				sender.sendMessage(Messages.MAP_DOESNT_EXIST);
 			} else {
 				Set<Player> players = game.getAlive();
-				sender.sendMessage(Messages.MAP_HAS_PLAYERS(game.getMap().getName(), players.size()));
+				sender.sendMessage(
+						Messages.MAP_HAS_PLAYERS(game.getMap().getName(), players.size()));
 			}
 		} else {
 			int count = plugin.getGM().allGames().size();

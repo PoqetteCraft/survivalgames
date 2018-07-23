@@ -12,14 +12,7 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class LeaveCommand extends SubCommand {
 
 	public LeaveCommand(SurvivalGamesPlugin pl) {
-		super(
-				pl,
-				0,
-				0,
-				Arrays.asList("leave"),
-				"",
-				"Leaves the current game",
-				"survivalgames.leave");
+		super(pl, 0, 0, Arrays.asList("leave"), "", "Leaves the current game", "leave");
 	}
 
 	@Override
