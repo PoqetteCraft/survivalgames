@@ -79,7 +79,9 @@ public class Game {
 		@SuppressWarnings("deprecation")
 		public void restore(Player player) {
 			for (ItemStack is : player.getInventory().getContents()) {
-				player.getWorld().dropItemNaturally(player.getLocation(), is);
+				if (is != null) {
+					player.getWorld().dropItemNaturally(player.getLocation(), is);
+				}
 			}
 			player.teleport(loc);
 			player.setGameMode(gm);
