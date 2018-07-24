@@ -14,13 +14,7 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class ListCommand extends SubCommand {
 
 	public ListCommand(SurvivalGamesPlugin pl) {
-		super(pl,
-				0,
-				1,
-				Arrays.asList("list"),
-				"[map]",
-				"List all maps or players in a map",
-				"list");
+		super(pl, 0, 1, Arrays.asList("list"), "[map]", "List all maps or players in a map", "list");
 	}
 
 	@Override
@@ -31,24 +25,34 @@ public class ListCommand extends SubCommand {
 			if (game == null) {
 				sender.sendMessage(Messages.MAP_DOESNT_EXIST);
 			} else {
-				Set<Player> players = game.getAlive();
-				sender.sendMessage(
-						Messages.MAP_HAS_PLAYERS(game.getMap().getName(), players.size()));
-				if (game.getStatus() == Status.IN_GAME) {
-					sender.sendMessage(Messages.ALIVE_PLAYERS(game.getAlive()));
-					sender.sendMessage(Messages.DEAD_PLAYERS(game.getDeadOrLeft()));
-				}
+				displayGameInfo(game, sender);
 			}
 		} else {
-			int count = plugin.getGM().allGames().size();
-			sender.sendMessage(Messages.LIST_NUM_GAMES(count));
-			for (Game g : plugin.getGM().allGames()) {
-				sender.sendMessage(Messages.LIST_GAME_NAME(g.getMap().getName(), g.getStatus()));
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				if (plugin.getGM().isInGame(player)) {
+					Game game = plugin.getGM().byPlayer(player);
+					displayGameInfo(game, player);
+				}
+			} else {
+				int count = plugin.getGM().allGames().size();
+				sender.sendMessage(Messages.LIST_NUM_GAMES(count));
+				for (Game g : plugin.getGM().allGames()) {
+					sender.sendMessage(Messages.LIST_GAME_NAME(g.getMap().getName(), g.getStatus()));
+				}
 			}
-
 		}
 
 		return true;
+	}
+
+	private void displayGameInfo(Game game, CommandSender sender) {
+		Set<Player> players = game.getAlive();
+		sender.sendMessage(Messages.MAP_HAS_PLAYERS(game.getMap().getName(), players.size()));
+		if (game.getStatus() == Status.IN_GAME) {
+			sender.sendMessage(Messages.ALIVE_PLAYERS(game.getAlive()));
+			sender.sendMessage(Messages.DEAD_PLAYERS(game.getDead()));
+		}
 	}
 
 }

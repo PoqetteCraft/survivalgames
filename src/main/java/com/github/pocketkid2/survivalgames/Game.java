@@ -136,7 +136,7 @@ public class Game {
 		return activePlayers.keySet();
 	}
 
-	public List<OfflinePlayer> getDeadOrLeft() {
+	public List<OfflinePlayer> getDead() {
 		return inactivePlayers;
 	}
 
@@ -305,7 +305,9 @@ public class Game {
 			}
 
 			if (getStatus() == Status.IN_GAME) {
-				inactivePlayers.add(player);
+				if (!voluntary) {
+					inactivePlayers.add(player);
+				}
 
 				// If he died or left
 				if (voluntary) {
