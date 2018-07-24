@@ -13,6 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -22,6 +24,7 @@ import com.github.pocketkid2.survivalgames.random.RandomIntSet;
 import com.github.pocketkid2.survivalgames.tasks.ChestRefreshTask;
 import com.github.pocketkid2.survivalgames.tasks.CountdownTask;
 import com.github.pocketkid2.survivalgames.tasks.GracePeriodTask;
+import com.github.pocketkid2.survivalgames.tasks.StopGameTask;
 
 /**
  * Represents an automated game given a map loaded from disk (arena)
@@ -235,13 +238,26 @@ public class Game {
 		case WAITING:
 		case IN_GAME:
 		case STARTING:
+			// Reset all tasks
+			for (BukkitTask bt : tasks) {
+				bt.cancel();
+			}
+			tasks.clear();
 			// Reset players
 			for (Player p : activePlayers.keySet()) {
-				leave(p, true, "");
+				leave(p, true, "", false, "");
 			}
 			// Reset blocks
 			for (BlockState state : toReset) {
 				state.update(true, false);
+			}
+			// Reset items
+			for (Entity entity : arena.getCenter().getWorld().getNearbyEntities(arena.getCenter(), arena.getRadius(), arena.getRadius(),
+					arena.getRadius())) {
+				if (entity instanceof Item) {
+					Item item = (Item) entity;
+					item.remove();
+				}
 			}
 			// Reset chests
 			resetChests();
@@ -250,11 +266,6 @@ public class Game {
 			inactivePlayers.clear();
 			// Reset to default status
 			status = Status.WAITING;
-			// Reset all tasks
-			for (BukkitTask bt : tasks) {
-				bt.cancel();
-			}
-			tasks.clear();
 			// Reset grace period flag
 			gracePeriod = false;
 			log("Stopped game");
@@ -276,7 +287,7 @@ public class Game {
 	 * @param voluntary True if they were not killed, false if they were killed
 	 * @param killer    If killed, who did it
 	 */
-	public void leave(Player player, boolean voluntary, String killer) {
+	public void leave(Player player, boolean voluntary, String killer, boolean hasItem, String itemName) {
 		// Player must actually be playing
 		if (activePlayers.containsKey(player)) {
 
@@ -288,6 +299,11 @@ public class Game {
 			activePlayers.remove(player);
 
 			// Do all this stuff if the game was actually started
+			if ((getStatus() == Status.STARTING) || (getStatus() == Status.WAITING)) {
+				player.sendMessage(Messages.LEFT_GAME);
+				broadcast(Messages.PLAYER_LEFT_GAME(player.getName()));
+			}
+
 			if (getStatus() == Status.IN_GAME) {
 				inactivePlayers.add(player);
 
@@ -298,8 +314,14 @@ public class Game {
 						broadcast(Messages.PLAYER_LEFT_GAME(player.getName()));
 					}
 				} else {
-					player.sendMessage(Messages.KILLED_BY(killer));
-					broadcast(Messages.PLAYER_KILLED(player.getName(), killer));
+					if (hasItem) {
+						player.sendMessage(Messages.KILLED_WITH(killer, itemName));
+						broadcast(Messages.PLAYER_KILLED_WITH(player.getName(), killer, itemName));
+					} else {
+						player.sendMessage(Messages.KILLED_BY(killer));
+						broadcast(Messages.PLAYER_KILLED(player.getName(), killer));
+					}
+
 				}
 
 				// If the game is still going
@@ -321,18 +343,14 @@ public class Game {
 			// Grab that one player
 			Player player = (Player) activePlayers.keySet().toArray()[0];
 
-			// Grab his save data and restore
-			SaveData sd = activePlayers.get(player);
-			sd.restore(player);
-
 			// Tell the player he won
 			player.sendMessage(Messages.YOU_HAVE_WON);
 
 			// Broadcast the win to the entire server
 			plugin.getServer().broadcastMessage(Messages.PLAYER_HAS_WON(player.getName(), arena.getName()));
 
-			// Reset the arena
-			stop();
+			// Schedule the stop game timer
+			tasks.add(new StopGameTask(plugin.getSM().getVictoryTimer(), this).runTaskTimer(plugin, 0, 20));
 		}
 	}
 

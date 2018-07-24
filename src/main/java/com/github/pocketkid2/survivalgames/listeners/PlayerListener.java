@@ -14,7 +14,7 @@ public class PlayerListener extends BaseListener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		if (plugin.getGM().isInGame(event.getPlayer())) {
-			plugin.getGM().byPlayer(event.getPlayer()).leave(event.getPlayer(), true, "");
+			plugin.getGM().byPlayer(event.getPlayer()).leave(event.getPlayer(), true, "", false, "");
 		}
 	}
 }

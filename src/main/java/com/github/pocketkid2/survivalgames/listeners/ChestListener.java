@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import com.github.pocketkid2.survivalgames.Game;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 import com.github.pocketkid2.survivalgames.Values;
+import com.github.pocketkid2.survivalgames.Game.Status;
 
 public class ChestListener extends BaseListener {
 
@@ -35,6 +36,12 @@ public class ChestListener extends BaseListener {
 			if (state instanceof Chest) {
 				Game game = plugin.getGM().byBlock(block);
 				if (game != null) {
+					if ((game.getStatus() == Status.WAITING) || (game.getStatus() == Status.STARTING)) {
+						if (game.isInGame(event.getPlayer())) {
+							event.setCancelled(true);
+							return;
+						}
+					}
 					if (!game.isChest(block)) {
 						// Populate chest
 						Inventory inv = ((Chest) state).getBlockInventory();

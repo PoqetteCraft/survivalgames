@@ -1,5 +1,6 @@
 package com.github.pocketkid2.survivalgames.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.pocketkid2.survivalgames.Game;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
@@ -50,6 +52,9 @@ public class DamageListener extends BaseListener {
 					// We need a killer name
 					String killer = "";
 
+					boolean hasItem = false;
+					String itemName = "";
+
 					// If they were killed by an entity
 					if (event instanceof EntityDamageByEntityEvent) {
 
@@ -61,6 +66,13 @@ public class DamageListener extends BaseListener {
 						if (entity.getType() == EntityType.PLAYER) {
 							// Get the player name
 							killer = ((Player) entity).getName();
+							hasItem = true;
+							ItemStack stack = ((Player) entity).getInventory().getItemInMainHand();
+							if (stack == null) {
+								itemName = "FIST";
+							} else {
+								itemName = stack.getType().toString();
+							}
 						} else {
 							// Otherwise get the entity type
 							killer = entity.getType().toString();
@@ -77,7 +89,19 @@ public class DamageListener extends BaseListener {
 					}
 
 					// Pull them out involuntarily
-					g.leave(player, false, killer);
+					g.leave(player, false, killer, hasItem, itemName);
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerHitPlayer(EntityDamageByEntityEvent event) {
+		if (event.getEntity().getType() == EntityType.PLAYER) {
+			if (event.getDamager().getType() == EntityType.PLAYER) {
+				Player damager = (Player) event.getDamager();
+				if (damager.getInventory().getItemInMainHand().getType() == Material.STICK) {
+					event.setDamage(3.0);
 				}
 			}
 		}
