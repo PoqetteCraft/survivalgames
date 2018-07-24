@@ -221,7 +221,13 @@ public interface Messages {
 	}
 
 	static String GRACE_PERIOD_LEFT(int seconds) {
-		return INFO() + "Grace period will end in " + NUMBER(seconds) + " seconds!";
+		String message = "";
+		if (seconds > 1) {
+			message = INFO() + "Grace period will end in " + NUMBER(seconds) + " seconds!";
+		} else if (seconds == 1) {
+			message = INFO() + "Grace period will end in " + NUMBER(seconds) + " second!";
+		}
+		return message;
 	}
 
 }
