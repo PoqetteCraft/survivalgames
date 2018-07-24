@@ -245,7 +245,7 @@ public class Game {
 			tasks.clear();
 			// Reset players
 			for (Player p : activePlayers.keySet()) {
-				leave(p, true, "");
+				leave(p, true, "", false, "");
 			}
 			// Reset blocks
 			for (BlockState state : toReset) {
@@ -287,7 +287,7 @@ public class Game {
 	 * @param voluntary True if they were not killed, false if they were killed
 	 * @param killer    If killed, who did it
 	 */
-	public void leave(Player player, boolean voluntary, String killer) {
+	public void leave(Player player, boolean voluntary, String killer, boolean hasItem, String itemName) {
 		// Player must actually be playing
 		if (activePlayers.containsKey(player)) {
 
@@ -314,8 +314,14 @@ public class Game {
 						broadcast(Messages.PLAYER_LEFT_GAME(player.getName()));
 					}
 				} else {
-					player.sendMessage(Messages.KILLED_BY(killer));
-					broadcast(Messages.PLAYER_KILLED(player.getName(), killer));
+					if (hasItem) {
+						player.sendMessage(Messages.KILLED_WITH(killer, itemName));
+						broadcast(Messages.PLAYER_KILLED_WITH(player.getName(), killer, itemName));
+					} else {
+						player.sendMessage(Messages.KILLED_BY(killer));
+						broadcast(Messages.PLAYER_KILLED(player.getName(), killer));
+					}
+
 				}
 
 				// If the game is still going

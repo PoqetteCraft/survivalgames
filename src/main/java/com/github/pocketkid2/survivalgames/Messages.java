@@ -75,6 +75,10 @@ public interface Messages {
 		return ChatColor.GRAY + name + INFO();
 	}
 
+	static String ITEM(String name) {
+		return ChatColor.LIGHT_PURPLE + name + INFO();
+	}
+
 	/*
 	 * Winning player chat formatting
 	 */
@@ -154,8 +158,16 @@ public interface Messages {
 		return INFO() + "You were killed by " + KILLER(name);
 	}
 
+	static String KILLED_WITH(String name, String item) {
+		return KILLED_BY(name) + " with " + ITEM(item);
+	}
+
 	static String PLAYER_KILLED(String killed, String killer) {
 		return KILLED(killed) + " was killed by " + KILLER(killer);
+	}
+
+	static String PLAYER_KILLED_WITH(String killed, String killer, String item) {
+		return PLAYER_KILLED(killed, killer) + " with " + ITEM(item);
 	}
 
 	static String X_PLAYERS_LEFT(int size) {

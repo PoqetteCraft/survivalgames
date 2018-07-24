@@ -22,7 +22,7 @@ public class LeaveCommand extends SubCommand {
 			// Check that the player is in a game
 			Game game = plugin.getGM().byPlayer(player);
 			if (game != null) {
-				game.leave(player, true, "");
+				game.leave(player, true, "", false, "");
 			} else {
 				player.sendMessage(Messages.NOT_IN_GAME);
 			}
