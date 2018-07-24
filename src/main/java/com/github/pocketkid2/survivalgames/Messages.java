@@ -35,6 +35,10 @@ public interface Messages {
 	String MAX_SPAWNS_REACHED = ERROR() + "Maximum spawn count reached for this arena!";
 	String INVALID_SPAWN_INDEX = ERROR() + "Invalid spawn index!";
 	String GAME_CANNOT_START = ERROR() + "That game cannot start now! Please check current status and player count";
+	String CHESTS_HAVE_REFRESHED = INFO() + "Loot chests have been refreshed!";
+	String GRACE_PERIOD_STARTED = INFO() + "Grace period has been started!";
+	String GRACE_PERIOD_ENDED = INFO() + "Grace period has ended!";
+	String NOT_ENOUGH_PLAYERS = ERROR() + "There are not enough players to start the game!";
 
 	/*
 	 * Number chat formatting
@@ -202,6 +206,10 @@ public interface Messages {
 	static String DEAD_PLAYERS(List<OfflinePlayer> deadOrLeft) {
 		List<String> names = deadOrLeft.stream().map(p -> DEAD(p.getName())).collect(Collectors.toList());
 		return INFO() + "Dead/Left (" + NUMBER(deadOrLeft.size()) + "): " + String.join(", ", names);
+	}
+
+	static String GRACE_PERIOD_LEFT(int seconds) {
+		return INFO() + "Grace period will end in " + NUMBER(seconds) + " seconds!";
 	}
 
 }

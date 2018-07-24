@@ -11,6 +11,20 @@ global:
         threshold: 0.5
         # Timer (seconds)
         timer: 60
+        
+    # Mid-game chest refresh settings
+    chest-refresh:
+        # On/off
+        enabled: true
+        # Timer (seconds)
+        timer: 1200     # 20 minutes = 1 minecraft day
+    
+    # Grace period (no killing during this amount of time after the game starts)
+    grace-period:
+        # On/off
+        enabled: true
+        # Timer (seconds)
+        timer: 30       # Default is 30 seconds
     
     # A list of all material types that are allowed to be broken
     allowed-blocks:

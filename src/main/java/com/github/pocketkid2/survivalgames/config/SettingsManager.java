@@ -13,11 +13,19 @@ import com.github.pocketkid2.survivalgames.Values;
 public class SettingsManager {
 
 	private SurvivalGamesPlugin plugin;
+
 	private ConfigAccessor map_config;
 	private ConfigAccessor item_config;
+
 	private List<Material> allowedBlocks;
 	private double autoStartThreshold;
 	private int autoStartTimer;
+
+	private boolean chestRefreshEnabled;
+	private int chestRefreshTimer;
+
+	private boolean gracePeriodEnabled;
+	private int gracePeriodTimer;
 
 	public SettingsManager(SurvivalGamesPlugin plugin) {
 		this.plugin = plugin;
@@ -39,6 +47,12 @@ public class SettingsManager {
 		allowedBlocks = ids.stream().map(id -> Material.getMaterial(id)).collect(Collectors.toList());
 		autoStartThreshold = plugin.getConfig().getDouble("global.auto-start.threshold");
 		autoStartTimer = plugin.getConfig().getInt("global.auto-start.timer");
+		// Populate chest refresh settings
+		chestRefreshEnabled = plugin.getConfig().getBoolean("global.chest-refresh.enabled");
+		chestRefreshTimer = plugin.getConfig().getInt("global.chest-refresh.timer");
+		// Populate grace period settings
+		gracePeriodEnabled = plugin.getConfig().getBoolean("global.grace-period.enabled");
+		gracePeriodTimer = plugin.getConfig().getInt("global.grace-period.timer");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -90,6 +104,34 @@ public class SettingsManager {
 
 	public int getAutoStartTimer() {
 		return autoStartTimer;
+	}
+
+	/**
+	 * @return the chestRefreshEnabled
+	 */
+	public boolean isChestRefreshEnabled() {
+		return chestRefreshEnabled;
+	}
+
+	/**
+	 * @return the chestRefreshTimer
+	 */
+	public int getChestRefreshTimer() {
+		return chestRefreshTimer;
+	}
+
+	/**
+	 * @return the gracePeriodEnabled
+	 */
+	public boolean isGracePeriodEnabled() {
+		return gracePeriodEnabled;
+	}
+
+	/**
+	 * @return the gracePeriodTimer
+	 */
+	public int getGracePeriodTimer() {
+		return gracePeriodTimer;
 	}
 
 }

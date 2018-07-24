@@ -33,6 +33,11 @@ public class DamageListener extends BaseListener {
 			// Check that they're in-game
 			if (plugin.getGM().isInGame(player)) {
 
+				// Check if the grace period is on
+				if (plugin.getGM().byPlayer(player).isGracePeriod()) {
+					event.setCancelled(true);
+				}
+
 				// If the player is going to die
 				if (player.getHealth() <= event.getFinalDamage()) {
 

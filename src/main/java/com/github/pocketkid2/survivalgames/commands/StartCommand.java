@@ -37,8 +37,11 @@ public class StartCommand extends SubCommand {
 			}
 		}
 		if (game.canStart()) {
-			game.countdown(10);
-			sender.sendMessage(Messages.GAME_STARTED(game.getMap().getName()));
+			if (game.countdown(10)) {
+				sender.sendMessage(Messages.GAME_STARTED(game.getMap().getName()));
+			} else {
+				sender.sendMessage(Messages.GAME_CANNOT_START);
+			}
 		} else {
 			sender.sendMessage(Messages.GAME_CANNOT_START);
 		}

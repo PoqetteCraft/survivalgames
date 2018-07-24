@@ -2,6 +2,7 @@ package com.github.pocketkid2.survivalgames;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,10 +15,13 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.github.pocketkid2.survivalgames.random.BinaryRandomCount;
 import com.github.pocketkid2.survivalgames.random.RandomIntSet;
+import com.github.pocketkid2.survivalgames.tasks.ChestRefreshTask;
+import com.github.pocketkid2.survivalgames.tasks.CountdownTask;
+import com.github.pocketkid2.survivalgames.tasks.GracePeriodTask;
 
 /**
  * Represents an automated game given a map loaded from disk (arena)
@@ -72,11 +76,16 @@ public class Game {
 		}
 
 		// Restores the player's data to the data held in this object
+		@SuppressWarnings("deprecation")
 		public void restore(Player player) {
+			for (ItemStack is : player.getInventory().getContents()) {
+				player.getWorld().dropItemNaturally(player.getLocation(), is);
+			}
 			player.teleport(loc);
 			player.setGameMode(gm);
 			player.getInventory().setContents(contents);
 			player.setFlying(isFlying);
+			player.setHealth(player.getMaxHealth());
 		}
 
 	}
@@ -92,6 +101,8 @@ public class Game {
 	private List<Block> chests;
 	private BinaryRandomCount brc;
 	private RandomIntSet ris;
+	private List<BukkitTask> tasks;
+	private boolean gracePeriod;
 
 	// Initialization constructor
 	public Game(SurvivalGamesPlugin plugin, GameManager gameManager, Arena m) {
@@ -105,6 +116,8 @@ public class Game {
 		chests = new ArrayList<Block>();
 		brc = new BinaryRandomCount();
 		ris = new RandomIntSet();
+		tasks = new LinkedList<BukkitTask>();
+		gracePeriod = false;
 		log("Loaded!");
 	}
 
@@ -233,7 +246,15 @@ public class Game {
 			// Clear both player lists
 			activePlayers.clear();
 			inactivePlayers.clear();
+			// Reset to default status
 			status = Status.WAITING;
+			// Reset all tasks
+			for (BukkitTask bt : tasks) {
+				bt.cancel();
+			}
+			tasks.clear();
+			// Reset grace period flag
+			gracePeriod = false;
 			log("Stopped game");
 			break;
 		}
@@ -242,7 +263,7 @@ public class Game {
 	/**
 	 * Reset the chests
 	 */
-	private void resetChests() {
+	public void resetChests() {
 		chests.clear();
 	}
 
@@ -318,40 +339,10 @@ public class Game {
 	 *
 	 * @param message
 	 */
-	private void broadcast(String message) {
+	public void broadcast(String message) {
 		for (Player player : activePlayers.keySet()) {
 			player.sendMessage(message);
 		}
-	}
-
-	/**
-	 * Represents the countdown timer, which broadcasts every second
-	 *
-	 * @author Adam
-	 *
-	 */
-	private class CountdownTask extends BukkitRunnable {
-
-		private int seconds;
-		private Game game;
-
-		CountdownTask(Game game, int seconds) {
-			this.game = game;
-			this.seconds = seconds;
-		}
-
-		@Override
-		public void run() {
-			// TODO more advanced timer logic for when to broadcast etc
-			if (seconds > 0) {
-				game.broadcast(Messages.GAME_STARTING_IN(seconds));
-				seconds--;
-			} else {
-				game.start();
-				cancel();
-			}
-		}
-
 	}
 
 	/**
@@ -361,11 +352,20 @@ public class Game {
 	 *
 	 * @param seconds
 	 */
-	public void countdown(int seconds) {
+	public boolean countdown(int seconds) {
 		if (status == Status.WAITING) {
+			if (activePlayers.size() < Values.MIN_PLAYERS) {
+				log("Game could not start - Not enough players!");
+				broadcast(Messages.NOT_ENOUGH_PLAYERS);
+				return false;
+			}
 			status = Status.STARTING;
-			new CountdownTask(this, seconds).runTaskTimer(plugin, 0, 20);
+			tasks.add(new CountdownTask(seconds, this).runTaskTimer(plugin, 0, 20));
 			log("Started countdown of " + seconds + " seconds");
+			return true;
+		} else {
+			log("Game could not start - Not available to start!");
+			return false;
 		}
 	}
 
@@ -374,7 +374,21 @@ public class Game {
 	 */
 	public void start() {
 		if (status == Status.STARTING) {
+			if (activePlayers.size() < Values.MIN_PLAYERS) {
+				log("Game could not start - Not enough players!");
+				broadcast(Messages.NOT_ENOUGH_PLAYERS);
+				stop();
+				return;
+			}
 			status = Status.IN_GAME;
+			// Check if grace period is enabled
+			if (plugin.getSM().isGracePeriodEnabled()) {
+				tasks.add(new GracePeriodTask(plugin.getSM().getGracePeriodTimer(), this).runTaskTimer(plugin, 0, 20));
+			}
+			// Check if chest refresh is enabled
+			if (plugin.getSM().isChestRefreshEnabled()) {
+				tasks.add(new ChestRefreshTask(plugin.getSM().getChestRefreshTimer(), this).runTaskTimer(plugin, 0, 20));
+			}
 			broadcast(Messages.GAMES_BEGIN);
 			log("Game started");
 		}
@@ -401,10 +415,6 @@ public class Game {
 		return chests.contains(chest);
 	}
 
-	public void clearChests() {
-		chests.clear();
-	}
-
 	/**
 	 * @return the brc
 	 */
@@ -417,5 +427,13 @@ public class Game {
 	 */
 	public RandomIntSet getRIS() {
 		return ris;
+	}
+
+	public boolean isGracePeriod() {
+		return gracePeriod;
+	}
+
+	public void setGracePeriod(boolean gracePeriod) {
+		this.gracePeriod = gracePeriod;
 	}
 }
