@@ -25,6 +25,9 @@ global:
         enabled: true
         # Timer (seconds)
         timer: 30       # Default is 30 seconds
+        
+    # When the last player is killed, how long until the game ends
+    victory-timer: 5
     
     # A list of all material types that are allowed to be broken
     allowed-blocks:

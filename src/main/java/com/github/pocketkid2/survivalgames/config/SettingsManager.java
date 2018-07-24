@@ -27,6 +27,8 @@ public class SettingsManager {
 	private boolean gracePeriodEnabled;
 	private int gracePeriodTimer;
 
+	private int victoryTimer;
+
 	public SettingsManager(SurvivalGamesPlugin plugin) {
 		this.plugin = plugin;
 		plugin.saveDefaultConfig();
@@ -53,6 +55,8 @@ public class SettingsManager {
 		// Populate grace period settings
 		gracePeriodEnabled = plugin.getConfig().getBoolean("global.grace-period.enabled");
 		gracePeriodTimer = plugin.getConfig().getInt("global.grace-period.timer");
+		// Grab victory timer
+		victoryTimer = plugin.getConfig().getInt("global.victory-timer");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -132,6 +136,13 @@ public class SettingsManager {
 	 */
 	public int getGracePeriodTimer() {
 		return gracePeriodTimer;
+	}
+
+	/**
+	 * @return the victoryTimer
+	 */
+	public int getVictoryTimer() {
+		return victoryTimer;
 	}
 
 }
