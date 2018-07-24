@@ -66,7 +66,7 @@ public class ChestListener extends BaseListener {
 		// Choose which items to use
 		List<Material> reduced = new LinkedList<Material>();
 		for (Integer i : choose) {
-			reduced.add(items.get(i)); // Subtract one because lists are indexed 0...size-1
+			reduced.add(items.get(i));
 		}
 
 		// Now choose which inventory slots to put them in

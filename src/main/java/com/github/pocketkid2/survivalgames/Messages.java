@@ -1,6 +1,12 @@
 package com.github.pocketkid2.survivalgames;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.github.pocketkid2.survivalgames.Game.Status;
@@ -28,6 +34,7 @@ public interface Messages {
 	String INCORRECT_COMMAND_USAGE = ERROR() + "Incorrect command usage!";
 	String MAX_SPAWNS_REACHED = ERROR() + "Maximum spawn count reached for this arena!";
 	String INVALID_SPAWN_INDEX = ERROR() + "Invalid spawn index!";
+	String GAME_CANNOT_START = ERROR() + "That game cannot start now! Please check current status and player count";
 
 	/*
 	 * Number chat formatting
@@ -71,6 +78,14 @@ public interface Messages {
 		return ChatColor.GOLD + "" + ChatColor.BOLD + name + INFO();
 	}
 
+	static String ALIVE(String name) {
+		return ChatColor.GREEN + name + INFO();
+	}
+
+	static String DEAD(String name) {
+		return ChatColor.RED + name + INFO();
+	}
+
 	/*
 	 * Standard command color
 	 */
@@ -90,8 +105,7 @@ public interface Messages {
 	}
 
 	static String CREATED_MAP(String name, int radius) {
-		return INFO() + "Created arena " + MAP(name) + " with radius " + NUMBER(radius)
-				+ " from your current location";
+		return INFO() + "Created arena " + MAP(name) + " with radius " + NUMBER(radius) + " from your current location";
 	}
 
 	static String MAP_REMOVED(String name) {
@@ -111,11 +125,9 @@ public interface Messages {
 	}
 
 	static String[] MAP_INFO(Game g) {
-		return new String[] { INFO() + "Name: " + MAP(g.getMap().getName()),
-				INFO() + "Radius: " + NUMBER(g.getMap().getRadius()),
+		return new String[] { INFO() + "Name: " + MAP(g.getMap().getName()), INFO() + "Radius: " + NUMBER(g.getMap().getRadius()),
 				INFO() + "Status: " + g.getStatus().getReadable(),
-				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + g.getAlive().size() + "/"
-						+ g.getMap().getSpawns().size() };
+				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + g.getAlive().size() + "/" + g.getMap().getSpawns().size() };
 	}
 
 	static String GAME_STARTED(String name) {
@@ -180,6 +192,16 @@ public interface Messages {
 
 	static String SPAWN_UPDATED(int index) {
 		return INFO() + "Update spawn " + NUMBER(index + 1);
+	}
+
+	static String ALIVE_PLAYERS(Set<Player> alive) {
+		Set<String> names = alive.stream().map(p -> ALIVE(p.getName())).collect(Collectors.toSet());
+		return INFO() + "Alive (" + NUMBER(alive.size()) + "): " + String.join(", ", names);
+	}
+
+	static String DEAD_PLAYERS(List<OfflinePlayer> deadOrLeft) {
+		List<String> names = deadOrLeft.stream().map(p -> DEAD(p.getName())).collect(Collectors.toList());
+		return INFO() + "Dead/Left (" + NUMBER(deadOrLeft.size()) + "): " + String.join(", ", names);
 	}
 
 }

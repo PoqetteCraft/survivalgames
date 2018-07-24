@@ -11,4 +11,6 @@ public interface Values {
 	int MIN_SPAWNS = 4;
 	int MAX_SPAWNS = 50;
 
+	int MIN_PLAYERS = 2;
+
 }

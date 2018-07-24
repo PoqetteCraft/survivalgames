@@ -2,6 +2,7 @@ package com.github.pocketkid2.survivalgames.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 
@@ -35,10 +36,7 @@ public class SettingsManager {
 	private void loadGlobalSettings() {
 		// Populate allowed blocks list
 		List<Integer> ids = plugin.getConfig().getIntegerList("global.allowed-blocks");
-		allowedBlocks = new ArrayList<Material>();
-		for (Integer id : ids) {
-			allowedBlocks.add(Material.getMaterial(id));
-		}
+		allowedBlocks = ids.stream().map(id -> Material.getMaterial(id)).collect(Collectors.toList());
 		autoStartThreshold = plugin.getConfig().getDouble("global.auto-start.threshold");
 		autoStartTimer = plugin.getConfig().getInt("global.auto-start.timer");
 	}

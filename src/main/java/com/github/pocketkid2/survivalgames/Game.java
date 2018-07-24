@@ -118,6 +118,10 @@ public class Game {
 		return activePlayers.keySet();
 	}
 
+	public List<OfflinePlayer> getDeadOrLeft() {
+		return inactivePlayers;
+	}
+
 	// Getter
 	public Status getStatus() {
 		return status;
@@ -126,6 +130,10 @@ public class Game {
 	// Getter
 	public Arena getMap() {
 		return arena;
+	}
+
+	public boolean canStart() {
+		return activePlayers.size() >= Values.MIN_PLAYERS && getStatus() == Status.WAITING;
 	}
 
 	/**

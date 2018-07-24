@@ -12,23 +12,17 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class StartCommand extends SubCommand {
 
 	protected StartCommand(SurvivalGamesPlugin pl) {
-		super(pl,
-				0,
-				1,
-				Arrays.asList("start"),
-				"[name]",
-				"Starts either your game or the game specified",
-				"start");
+		super(pl, 0, 1, Arrays.asList("start"), "[name]", "Starts either your game or the game specified", "start");
 	}
 
 	@Override
 	public boolean execute(CommandSender sender, String[] arguments) {
-		Game g;
+		Game game;
 		if (arguments.length == 1) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
-				g = plugin.getGM().byPlayer(player);
-				if (g == null) {
+				game = plugin.getGM().byPlayer(player);
+				if (game == null) {
 					player.sendMessage(Messages.NOT_IN_GAME);
 					return true;
 				}
@@ -36,14 +30,18 @@ public class StartCommand extends SubCommand {
 				return false;
 			}
 		} else {
-			g = plugin.getGM().byName(arguments[1]);
-			if (g == null) {
+			game = plugin.getGM().byName(arguments[1]);
+			if (game == null) {
 				sender.sendMessage(Messages.MAP_DOESNT_EXIST);
 				return true;
 			}
 		}
-		g.countdown(10);
-		sender.sendMessage(Messages.GAME_STARTED(g.getMap().getName()));
+		if (game.canStart()) {
+			game.countdown(10);
+			sender.sendMessage(Messages.GAME_STARTED(game.getMap().getName()));
+		} else {
+			sender.sendMessage(Messages.GAME_CANNOT_START);
+		}
 		return true;
 	}
 

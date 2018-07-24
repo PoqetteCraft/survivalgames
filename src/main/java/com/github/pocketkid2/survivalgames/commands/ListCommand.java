@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.pocketkid2.survivalgames.Game;
+import com.github.pocketkid2.survivalgames.Game.Status;
 import com.github.pocketkid2.survivalgames.Messages;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 
@@ -33,6 +34,10 @@ public class ListCommand extends SubCommand {
 				Set<Player> players = game.getAlive();
 				sender.sendMessage(
 						Messages.MAP_HAS_PLAYERS(game.getMap().getName(), players.size()));
+				if (game.getStatus() == Status.IN_GAME) {
+					sender.sendMessage(Messages.ALIVE_PLAYERS(game.getAlive()));
+					sender.sendMessage(Messages.DEAD_PLAYERS(game.getDeadOrLeft()));
+				}
 			}
 		} else {
 			int count = plugin.getGM().allGames().size();
