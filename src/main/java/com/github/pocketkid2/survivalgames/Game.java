@@ -133,7 +133,7 @@ public class Game {
 	}
 
 	public boolean canStart() {
-		return activePlayers.size() >= Values.MIN_PLAYERS && getStatus() == Status.WAITING;
+		return (activePlayers.size() >= Values.MIN_PLAYERS) && (getStatus() == Status.WAITING);
 	}
 
 	/**

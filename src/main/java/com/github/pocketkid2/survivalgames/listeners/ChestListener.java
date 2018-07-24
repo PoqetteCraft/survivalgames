@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
@@ -30,6 +31,7 @@ public class ChestListener extends BaseListener {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Block block = event.getClickedBlock();
 			BlockState state = block.getState();
+
 			if (state instanceof Chest) {
 				Game game = plugin.getGM().byBlock(block);
 				if (game != null) {
@@ -38,9 +40,29 @@ public class ChestListener extends BaseListener {
 						Inventory inv = ((Chest) state).getBlockInventory();
 						populate(game, inv);
 						game.addChest(block);
+						// Check if double chest
+						Block next = getAdjacentChest(block);
+						if (next != null) {
+							populate(game, ((Chest) next.getState()).getInventory());
+							game.addChest(next);
+						}
 					}
 				}
 			}
+		}
+	}
+
+	private Block getAdjacentChest(Block block) {
+		if (block.getRelative(BlockFace.NORTH).getState() instanceof Chest) {
+			return block.getRelative(BlockFace.NORTH);
+		} else if (block.getRelative(BlockFace.EAST).getState() instanceof Chest) {
+			return block.getRelative(BlockFace.EAST);
+		} else if (block.getRelative(BlockFace.WEST).getState() instanceof Chest) {
+			return block.getRelative(BlockFace.WEST);
+		} else if (block.getRelative(BlockFace.SOUTH).getState() instanceof Chest) {
+			return block.getRelative(BlockFace.SOUTH);
+		} else {
+			return null;
 		}
 	}
 
