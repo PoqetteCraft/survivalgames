@@ -47,3 +47,6 @@ permissions:
     survivalgames.setspawn:
         description: Allows /sg setspawn
         default: op
+    survivalgames.setlobbyspawn:
+        description: Allows /sg setlobbyspawn
+        default: op

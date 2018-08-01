@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 
-import com.github.pocketkid2.survivalgames.Arena;
 import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 import com.github.pocketkid2.survivalgames.Values;
 
@@ -16,6 +15,7 @@ public class SettingsManager {
 
 	private ConfigAccessor map_config;
 	private ConfigAccessor item_config;
+	private ConfigAccessor lobby_config;
 
 	private List<Material> allowedBlocks;
 	private double autoStartThreshold;
@@ -38,6 +38,9 @@ public class SettingsManager {
 
 		item_config = new ConfigAccessor(plugin, "items.yml");
 		item_config.saveDefaultConfig();
+
+		lobby_config = new ConfigAccessor(plugin, "lobby.yml");
+		lobby_config.saveDefaultConfig();
 
 		loadGlobalSettings();
 	}
@@ -71,31 +74,6 @@ public class SettingsManager {
 		} else {
 			return null;
 		}
-	}
-
-	/**
-	 * Retrives all maps from disk
-	 *
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Arena> loadAllMaps() {
-		// Grab changes from disk
-		map_config.reloadConfig();
-		// Read list
-		return (List<Arena>) map_config.getConfig().getList("all-maps", new ArrayList<Arena>());
-	}
-
-	/**
-	 * Saves all the given maps to the disk
-	 *
-	 * @param arenas
-	 */
-	public void saveAllMaps(List<Arena> arenas) {
-		// Save list
-		map_config.getConfig().set("all-maps", arenas);
-		// Save changes to disk
-		map_config.saveConfig();
 	}
 
 	public List<Material> allowedBlocks() {
@@ -143,6 +121,27 @@ public class SettingsManager {
 	 */
 	public int getVictoryTimer() {
 		return victoryTimer;
+	}
+
+	/**
+	 * @return the map_config
+	 */
+	public ConfigAccessor getMapConfig() {
+		return map_config;
+	}
+
+	/**
+	 * @return the item_config
+	 */
+	public ConfigAccessor getItemConfig() {
+		return item_config;
+	}
+
+	/**
+	 * @return the lobby_config
+	 */
+	public ConfigAccessor getLobbyConfig() {
+		return lobby_config;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -19,6 +20,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
+import com.github.pocketkid2.survivalgames.events.GameChangeStatusEvent;
+import com.github.pocketkid2.survivalgames.events.PlayerJoinGameEvent;
+import com.github.pocketkid2.survivalgames.events.PlayerLeaveGameEvent;
 import com.github.pocketkid2.survivalgames.random.BinaryRandomCount;
 import com.github.pocketkid2.survivalgames.random.RandomIntSet;
 import com.github.pocketkid2.survivalgames.tasks.ChestRefreshTask;
@@ -45,8 +49,8 @@ public class Game {
 
 	DISABLED(ChatColor.DARK_RED + "Disabled"),
 	RESETTING(ChatColor.AQUA + "Resetting arena"),
-	WAITING(ChatColor.GREEN + "Waiting for players"),
-	STARTING(ChatColor.GOLD + "Counting down"),
+	WAITING(ChatColor.GREEN + "Ready to join"),
+	STARTING(ChatColor.GOLD + "Starting game"),
 	IN_GAME(ChatColor.RED + "In-game");
 
 		private String readable;
@@ -69,9 +73,10 @@ public class Game {
 		private Location loc;
 		private GameMode gm;
 		private boolean isFlying;
+		private Game game;
 
 		// Constructs the save snapshot of the player at the current time
-		public SaveData(Player player) {
+		public SaveData(Player player, Game game) {
 			contents = player.getInventory().getContents();
 			loc = player.getLocation();
 			gm = player.getGameMode();
@@ -86,7 +91,11 @@ public class Game {
 					player.getWorld().dropItemNaturally(player.getLocation(), is);
 				}
 			}
-			player.teleport(loc);
+			if (plugin.getLM().getSpawn() != null) {
+				player.teleport(plugin.getLM().getSpawn());
+			} else {
+				player.teleport(loc);
+			}
 			player.setGameMode(gm);
 			player.getInventory().setContents(contents);
 			player.setFlying(isFlying);
@@ -192,7 +201,7 @@ public class Game {
 					Location spawn = arena.getSpawnByIndex(activePlayers.size());
 
 					// Save their data
-					activePlayers.put(player, new SaveData(player));
+					activePlayers.put(player, new SaveData(player, this));
 
 					// Prepare them for the game
 					player.teleport(spawn);
@@ -206,6 +215,10 @@ public class Game {
 					if (percentFull >= plugin.getSM().getAutoStartThreshold()) {
 						countdown(plugin.getSM().getAutoStartTimer());
 					}
+
+					// Notify anyone listening
+					PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
+					Bukkit.getServer().getPluginManager().callEvent(event);
 				} else {
 					player.sendMessage(Messages.GAME_FULL);
 				}
@@ -238,6 +251,9 @@ public class Game {
 		case WAITING:
 		case IN_GAME:
 		case STARTING:
+			status = Status.RESETTING;
+			GameChangeStatusEvent event = new GameChangeStatusEvent(this);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 			// Reset all tasks
 			for (BukkitTask bt : tasks) {
 				bt.cancel();
@@ -264,10 +280,12 @@ public class Game {
 			// Clear both player lists
 			activePlayers.clear();
 			inactivePlayers.clear();
-			// Reset to default status
-			status = Status.WAITING;
 			// Reset grace period flag
 			gracePeriod = false;
+			// Reset to default status
+			status = Status.WAITING;
+			event = new GameChangeStatusEvent(this);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 			log("Stopped game");
 			break;
 		}
@@ -335,6 +353,10 @@ public class Game {
 					endGame();
 				}
 			}
+
+			// Call event
+			PlayerLeaveGameEvent event = new PlayerLeaveGameEvent(this, player);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 		}
 	}
 
@@ -382,6 +404,8 @@ public class Game {
 				return false;
 			}
 			status = Status.STARTING;
+			GameChangeStatusEvent event = new GameChangeStatusEvent(this);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 			tasks.add(new CountdownTask(seconds, this).runTaskTimer(plugin, 0, 20));
 			log("Started countdown of " + seconds + " seconds");
 			return true;
@@ -403,6 +427,8 @@ public class Game {
 				return;
 			}
 			status = Status.IN_GAME;
+			GameChangeStatusEvent event = new GameChangeStatusEvent(this);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 			// Check if grace period is enabled
 			if (plugin.getSM().isGracePeriodEnabled()) {
 				tasks.add(new GracePeriodTask(plugin.getSM().getGracePeriodTimer(), this).runTaskTimer(plugin, 0, 20));

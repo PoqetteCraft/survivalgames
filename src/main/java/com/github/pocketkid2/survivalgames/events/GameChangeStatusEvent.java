@@ -1,37 +1,26 @@
 package com.github.pocketkid2.survivalgames.events;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.github.pocketkid2.survivalgames.Game;
 
-public class PlayerLeaveGameEvent extends Event {
+public class GameChangeStatusEvent extends Event {
 
-	private Game g;
-	private Player p;
+	private Game game;
 
 	/**
-	 * @return the g
+	 * @param game
 	 */
-	public Game getG() {
-		return g;
+	public GameChangeStatusEvent(Game game) {
+		this.game = game;
 	}
 
 	/**
-	 * @return the p
+	 * @return the game
 	 */
-	public Player getP() {
-		return p;
-	}
-
-	/**
-	 * @param g
-	 * @param p
-	 */
-	public PlayerLeaveGameEvent(Game g, Player p) {
-		this.g = g;
-		this.p = p;
+	public Game getGame() {
+		return game;
 	}
 
 	@Override

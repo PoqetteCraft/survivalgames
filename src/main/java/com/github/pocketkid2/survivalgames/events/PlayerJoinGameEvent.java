@@ -36,8 +36,13 @@ public class PlayerJoinGameEvent extends Event {
 
 	@Override
 	public HandlerList getHandlers() {
-		// TODO Auto-generated method stub
-		return null;
+		return handlers;
+	}
+
+	private static final HandlerList handlers = new HandlerList();
+
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 
 }

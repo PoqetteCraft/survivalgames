@@ -33,13 +33,13 @@ public class ListCommand extends SubCommand {
 				if (plugin.getGM().isInGame(player)) {
 					Game game = plugin.getGM().byPlayer(player);
 					displayGameInfo(game, player);
+					return true;
 				}
-			} else {
-				int count = plugin.getGM().allGames().size();
-				sender.sendMessage(Messages.LIST_NUM_GAMES(count));
-				for (Game g : plugin.getGM().allGames()) {
-					sender.sendMessage(Messages.LIST_GAME_NAME(g.getMap().getName(), g.getStatus()));
-				}
+			}
+			int count = plugin.getGM().allGames().size();
+			sender.sendMessage(Messages.LIST_NUM_GAMES(count));
+			for (Game game : plugin.getGM().allGames()) {
+				sender.sendMessage(Messages.LIST_GAME_NAME(game));
 			}
 		}
 

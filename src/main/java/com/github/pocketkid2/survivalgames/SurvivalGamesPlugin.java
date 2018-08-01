@@ -9,13 +9,16 @@ import com.github.pocketkid2.survivalgames.config.SettingsManager;
 import com.github.pocketkid2.survivalgames.listeners.BlockListener;
 import com.github.pocketkid2.survivalgames.listeners.ChestListener;
 import com.github.pocketkid2.survivalgames.listeners.DamageListener;
+import com.github.pocketkid2.survivalgames.listeners.GameListener;
 import com.github.pocketkid2.survivalgames.listeners.MoveListener;
 import com.github.pocketkid2.survivalgames.listeners.PlayerListener;
+import com.github.pocketkid2.survivalgames.listeners.SignListener;
 
 public class SurvivalGamesPlugin extends JavaPlugin {
 
 	private SettingsManager sm;
 	private GameManager gm;
+	private LobbyManager lm;
 
 	@Override
 	public void onEnable() {
@@ -38,7 +41,8 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		// Stop all games and save to file
-		gm.shutdown(sm);
+		gm.shutdown();
+		lm.shutdown();
 
 		getLogger().info("Done!");
 	}
@@ -54,17 +58,17 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		@Override
 		public void run() {
 			plugin.loadMaps();
+			plugin.loadLobby();
 			plugin.registerListeners();
+			plugin.getLM().update();
 		}
 
 	}
 
 	private void loadMaps() {
 		// Initialize game manager
-		gm = new GameManager(this, sm);
+		gm = new GameManager(this);
 
-		// Notify how many arenas were loaded from file
-		getLogger().info("Loaded " + gm.allGames().size() + " maps");
 	}
 
 	private void registerListeners() {
@@ -73,15 +77,27 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new ChestListener(this), this);
+		getServer().getPluginManager().registerEvents(new SignListener(this), this);
+		getServer().getPluginManager().registerEvents(new GameListener(this), this);
 	}
 
-	// Getter
+	private void loadLobby() {
+		// Initialize lobby manager
+		lm = new LobbyManager(this);
+
+		getLogger().info(lm.getSpawn() == null ? "Did not find lobby spawn" : "Found lobby spawn");
+		getLogger().info("Loaded " + lm.getSigns().size() + " signs");
+	}
+
 	public SettingsManager getSM() {
 		return sm;
 	}
 
-	// Getter
 	public GameManager getGM() {
 		return gm;
+	}
+
+	public LobbyManager getLM() {
+		return lm;
 	}
 }

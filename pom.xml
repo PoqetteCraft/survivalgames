@@ -23,6 +23,7 @@
 					<include>config.yml</include>
 					<include>maps.yml</include>
 					<include>items.yml</include>
+					<include>lobby.yml</include>
 				</includes>
 			</resource>
 		</resources>

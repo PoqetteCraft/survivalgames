@@ -9,8 +9,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import com.github.pocketkid2.survivalgames.Game.Status;
-
 public interface Messages {
 
 	String MUST_BE_PLAYER = ERROR() + "You must be a player!";
@@ -39,6 +37,11 @@ public interface Messages {
 	String GRACE_PERIOD_STARTED = INFO() + "Grace period has been started!";
 	String GRACE_PERIOD_ENDED = INFO() + "Grace period has ended!";
 	String NOT_ENOUGH_PLAYERS = ERROR() + "There are not enough players to start the game!";
+	String LOBBY_SPAWN_SET = INFO() + "Lobby spawn has been set!";
+	String SIGN_CREATED = INFO() + "Game sign created!";
+	String SIGN_REMOVED = INFO() + "Game sign removed!";
+	String LOBBY_SPAWN_NOT_SET = ERROR() + "Lobby spawn has not been set!";
+	String LOBBY_SPAWN_TELEPORTED = INFO() + "Teleported you to the lobby!";
 
 	/*
 	 * Number chat formatting
@@ -124,10 +127,6 @@ public interface Messages {
 		return INFO() + "There are " + NUMBER(count) + " maps";
 	}
 
-	static String LIST_GAME_NAME(String name, Status status) {
-		return INFO() + "Name: " + MAP(name) + " Status: " + status.getReadable();
-	}
-
 	static String JOINED_GAME(String name) {
 		return INFO() + "Joined game " + MAP(name);
 	}
@@ -136,6 +135,10 @@ public interface Messages {
 		return new String[] { INFO() + "Name: " + MAP(g.getMap().getName()), INFO() + "Radius: " + NUMBER(g.getMap().getRadius()),
 				INFO() + "Status: " + g.getStatus().getReadable(),
 				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + g.getAlive().size() + "/" + g.getMap().getSpawns().size() };
+	}
+
+	static String LIST_GAME_NAME(Game g) {
+		return INFO() + "Name: " + MAP(g.getMap().getName()) + " Status: " + g.getStatus().getReadable();
 	}
 
 	static String GAME_STARTED(String name) {

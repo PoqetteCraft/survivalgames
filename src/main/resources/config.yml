@@ -53,3 +53,10 @@ global:
      - 142  # Potatoes
      - 161  # Leaves (last two types)
      - 175  # Double height plants
+     
+
+# Lobby settings
+lobby:
+    # Spawn location (must be set on first-time
+    spawn:
+    

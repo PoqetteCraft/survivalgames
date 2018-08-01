@@ -2,11 +2,10 @@ package com.github.pocketkid2.survivalgames;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-
-import com.github.pocketkid2.survivalgames.config.SettingsManager;
 
 /*
  * Manages all operating and loaded games
@@ -22,16 +21,18 @@ public class GameManager {
 	 * @param plugin
 	 * @param sm
 	 */
-	public GameManager(SurvivalGamesPlugin plugin, SettingsManager sm) {
+	public GameManager(SurvivalGamesPlugin plugin) {
 		this.plugin = plugin;
 
-		games = new ArrayList<Game>();
+		plugin.getSM().getMapConfig().reloadConfig();
+		// Read list
+		@SuppressWarnings("unchecked")
+		List<Arena> arenas = (List<Arena>) plugin.getSM().getMapConfig().getConfig().getList("all-maps", new ArrayList<Arena>());
+		games = arenas.stream().map(a -> new Game(plugin, this, a)).collect(Collectors.toList());
 
-		List<Arena> arenas = sm.loadAllMaps();
+		// Notify how many arenas were loaded from file
+		plugin.getLogger().info("Loaded " + games.size() + " maps");
 
-		for (Arena arena : arenas) {
-			games.add(new Game(plugin, this, arena));
-		}
 	}
 
 	/**
@@ -39,19 +40,15 @@ public class GameManager {
 	 *
 	 * @param sm
 	 */
-	public void shutdown(SettingsManager sm) {
+	public void shutdown() {
 		// Stop all games peacefully
 		for (Game game : games) {
 			game.stop();
 		}
+		plugin.getLogger().info("Stopped " + games.size() + " maps");
+		plugin.getSM().getMapConfig().getConfig().set("all-maps", games.stream().map(g -> g.getMap()).collect(Collectors.toList()));
+		plugin.getSM().getMapConfig().saveConfig();
 
-		List<Arena> arenas = new ArrayList<Arena>();
-
-		for (Game game : games) {
-			arenas.add(game.getMap());
-		}
-
-		sm.saveAllMaps(arenas);
 	}
 
 	/**
@@ -146,7 +143,7 @@ public class GameManager {
 
 	/**
 	 * Returns the game that contains this block
-	 * 
+	 *
 	 * @param block
 	 * @return
 	 */
