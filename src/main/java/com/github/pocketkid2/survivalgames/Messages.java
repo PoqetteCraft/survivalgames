@@ -42,6 +42,7 @@ public interface Messages {
 	String SIGN_REMOVED = INFO() + "Game sign removed!";
 	String LOBBY_SPAWN_NOT_SET = ERROR() + "Lobby spawn has not been set!";
 	String LOBBY_SPAWN_TELEPORTED = INFO() + "Teleported you to the lobby!";
+	String SPAWN_OUTSIDE_ARENA = ERROR() + "The spawn location must be inside the arena!";
 
 	/*
 	 * Number chat formatting
@@ -53,8 +54,8 @@ public interface Messages {
 	/*
 	 * Arena name chat formatting
 	 */
-	static String MAP(String name) {
-		return ChatColor.BLUE + "" + ChatColor.ITALIC + name + INFO();
+	static String MAP(Arena arena) {
+		return ChatColor.BLUE + "" + ChatColor.ITALIC + arena.getName() + INFO();
 	}
 
 	/*
@@ -115,38 +116,38 @@ public interface Messages {
 		return String.format(COMMAND("/%s %s %s"), label, sub, args);
 	}
 
-	static String CREATED_MAP(String name, int radius) {
-		return INFO() + "Created arena " + MAP(name) + " with radius " + NUMBER(radius) + " from your current location";
+	static String CREATED_MAP(Arena arena) {
+		return INFO() + "Created arena " + MAP(arena) + " with radius " + NUMBER(arena.getRadius()) + " from your current location";
 	}
 
-	static String MAP_REMOVED(String name) {
-		return INFO() + "Arena " + MAP(name) + " deleted";
+	static String MAP_REMOVED(Arena arena) {
+		return INFO() + "Arena " + MAP(arena) + " deleted";
 	}
 
 	static String LIST_NUM_GAMES(int count) {
 		return INFO() + "There are " + NUMBER(count) + " maps";
 	}
 
-	static String JOINED_GAME(String name) {
-		return INFO() + "Joined game " + MAP(name);
+	static String JOINED_GAME(Arena arena) {
+		return INFO() + "Joined game " + MAP(arena);
 	}
 
 	static String[] MAP_INFO(Game game) {
-		return new String[] { INFO() + "Name: " + MAP(game.getMap().getName()), INFO() + "Radius: " + NUMBER(game.getMap().getRadius()),
+		return new String[] { INFO() + "Name: " + MAP(game.getMap()), INFO() + "Radius: " + NUMBER(game.getMap().getRadius()),
 				INFO() + "Status: " + game.getStatus().getReadable(),
 				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + game.currCount() + "/" + game.maxCount() };
 	}
 
 	static String LIST_GAME_NAME(Game game) {
-		return INFO() + "Name: " + MAP(game.getMap().getName()) + " Status: " + game.getStatus().getReadable();
+		return INFO() + "Name: " + MAP(game.getMap()) + " Status: " + game.getStatus().getReadable();
 	}
 
-	static String GAME_STARTED(String name) {
-		return INFO() + "Game " + MAP(name) + " has been started!";
+	static String GAME_STARTED(Arena arena) {
+		return INFO() + "Game " + MAP(arena) + " has been started!";
 	}
 
-	static String GAME_STOPPED(String name) {
-		return INFO() + "Game " + MAP(name) + " has been stopped!";
+	static String GAME_STOPPED(Arena arena) {
+		return INFO() + "Game " + MAP(arena) + " has been stopped!";
 	}
 
 	static String GAME_STARTING_IN(int seconds) {
@@ -177,8 +178,8 @@ public interface Messages {
 		return "There are " + NUMBER(size) + " players left!";
 	}
 
-	static String PLAYER_HAS_WON(String player, String map) {
-		return WON(player) + " has won the Survival Games on map " + MAP(map);
+	static String PLAYER_HAS_WON(String player, Arena arena) {
+		return WON(player) + " has won the Survival Games on map " + MAP(arena);
 	}
 
 	static String INFO_PLUGIN_1(PluginDescriptionFile description) {
@@ -201,15 +202,15 @@ public interface Messages {
 		return INFO() + "Command help for " + COMMAND("/sg " + alias);
 	}
 
-	static String MAP_HAS_PLAYERS(String name, int size) {
-		return INFO() + "Map " + MAP(name) + " currently has " + NUMBER(size) + " players";
+	static String MAP_HAS_PLAYERS(Arena arena, int size) {
+		return INFO() + "Map " + MAP(arena) + " currently has " + NUMBER(size) + " players";
 	}
 
-	static String SPAWN_ADDED(int size) {
-		return INFO() + "Added spawn " + NUMBER(size);
+	static String SPAWN_ADDED(int size, Arena arena) {
+		return INFO() + "Added spawn " + NUMBER(size) + " to map " + MAP(arena);
 	}
 
-	static String SPAWN_UPDATED(int index) {
+	static String SPAWN_UPDATED(int index, Arena arena) {
 		return INFO() + "Update spawn " + NUMBER(index + 1);
 	}
 

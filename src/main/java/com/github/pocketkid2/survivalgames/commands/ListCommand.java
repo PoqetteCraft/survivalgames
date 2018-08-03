@@ -48,8 +48,8 @@ public class ListCommand extends SubCommand {
 
 	private void displayGameInfo(Game game, CommandSender sender) {
 		Set<Player> players = game.getAlive();
-		sender.sendMessage(Messages.MAP_HAS_PLAYERS(game.getMap().getName(), players.size()));
-		if (game.getStatus() == Status.IN_GAME) {
+		sender.sendMessage(Messages.MAP_HAS_PLAYERS(game.getMap(), players.size()));
+		if ((game.getStatus() == Status.IN_GAME) || (game.getStatus() == Status.WAITING) || (game.getStatus() == Status.STARTING)) {
 			sender.sendMessage(Messages.ALIVE_PLAYERS(game.getAlive()));
 			sender.sendMessage(Messages.DEAD_PLAYERS(game.getDead()));
 		}

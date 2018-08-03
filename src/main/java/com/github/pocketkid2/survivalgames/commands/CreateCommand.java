@@ -52,9 +52,10 @@ public class CreateCommand extends SubCommand {
 				return true;
 			}
 
-			plugin.getGM().addMap(new Arena(name, loc, radius));
+			Arena arena = new Arena(name, loc, radius);
+			plugin.getGM().addMap(arena);
 
-			sender.sendMessage(Messages.CREATED_MAP(name, radius));
+			sender.sendMessage(Messages.CREATED_MAP(arena));
 		} else {
 			sender.sendMessage(Messages.MUST_BE_PLAYER);
 		}

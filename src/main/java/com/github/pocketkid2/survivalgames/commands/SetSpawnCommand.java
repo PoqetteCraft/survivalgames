@@ -35,8 +35,12 @@ public class SetSpawnCommand extends SubCommand {
 				if ((index < 0) || (index >= game.getMap().getSpawns().size())) {
 					player.sendMessage(Messages.INVALID_SPAWN_INDEX);
 				} else {
-					game.getMap().setSpawn(index, player.getLocation());
-					player.sendMessage(Messages.SPAWN_UPDATED(index));
+					if (game.getMap().contains(player.getLocation())) {
+						game.getMap().setSpawn(index, player.getLocation());
+						player.sendMessage(Messages.SPAWN_UPDATED(index, game.getMap()));
+					} else {
+						player.sendMessage(Messages.SPAWN_OUTSIDE_ARENA);
+					}
 				}
 			}
 		} else {

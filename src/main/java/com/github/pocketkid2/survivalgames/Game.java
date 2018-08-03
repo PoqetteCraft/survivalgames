@@ -214,7 +214,7 @@ public class Game {
 					// Prepare them for the game
 					player.teleport(spawn);
 					prepare(player);
-					player.sendMessage(Messages.JOINED_GAME(arena.getName()));
+					player.sendMessage(Messages.JOINED_GAME(arena));
 
 					// If we have enough players, start the game
 					int current = activePlayers.size();
@@ -379,7 +379,7 @@ public class Game {
 			player.sendMessage(Messages.YOU_HAVE_WON);
 
 			// Broadcast the win to the entire server
-			plugin.getServer().broadcastMessage(Messages.PLAYER_HAS_WON(player.getName(), arena.getName()));
+			plugin.getServer().broadcastMessage(Messages.PLAYER_HAS_WON(player.getName(), arena));
 
 			// Schedule the stop game timer
 			tasks.add(new StopGameTask(plugin.getSM().getVictoryTimer(), this).runTaskTimer(plugin, 0, 20));
