@@ -8,30 +8,30 @@ import com.github.pocketkid2.survivalgames.Game;
 
 public class PlayerLeaveGameEvent extends Event {
 
-	private Game g;
-	private Player p;
+	private Game game;
+	private Player player;
 
 	/**
-	 * @return the g
+	 * @return the game
 	 */
-	public Game getG() {
-		return g;
+	public Game getGame() {
+		return game;
 	}
 
 	/**
-	 * @return the p
+	 * @return the player
 	 */
-	public Player getP() {
-		return p;
+	public Player getPlayer() {
+		return player;
 	}
 
 	/**
-	 * @param g
-	 * @param p
+	 * @param game
+	 * @param player
 	 */
 	public PlayerLeaveGameEvent(Game g, Player p) {
-		this.g = g;
-		this.p = p;
+		game = g;
+		player = p;
 	}
 
 	@Override

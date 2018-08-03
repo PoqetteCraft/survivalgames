@@ -135,6 +135,14 @@ public class Game {
 		log("Loaded!");
 	}
 
+	public int maxCount() {
+		return arena.getSpawns().size();
+	}
+
+	public int currCount() {
+		return activePlayers.size();
+	}
+
 	// Private logger
 	private void log(String message) {
 		plugin.getLogger().info(String.format("[%s] %s", getMap().getName(), message));

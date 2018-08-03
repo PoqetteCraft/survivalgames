@@ -12,13 +12,7 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class SetSpawnCommand extends SubCommand {
 
 	public SetSpawnCommand(SurvivalGamesPlugin pl) {
-		super(pl,
-				2,
-				2,
-				Arrays.asList("setspawn"),
-				"<name> <id>",
-				"Override a specific spawn location",
-				"setspawn");
+		super(pl, 2, 2, Arrays.asList("setspawn"), "<name> <id>", "Override a specific spawn location", "setspawn");
 	}
 
 	@Override

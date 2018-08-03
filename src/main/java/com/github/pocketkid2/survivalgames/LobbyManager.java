@@ -1,104 +1,106 @@
 package com.github.pocketkid2.survivalgames;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 public class LobbyManager {
 
 	private SurvivalGamesPlugin plugin;
 	private Location spawn;
-	private List<SGSign> signs;
+	private Map<SGSign, Game> signs;
 
 	@SuppressWarnings("unchecked")
 	public LobbyManager(SurvivalGamesPlugin pl) {
 		plugin = pl;
 
+		// Load config from disk
 		plugin.getSM().getLobbyConfig().reloadConfig();
 
+		// Load spawn location
 		spawn = plugin.getSM().getLobbyConfig().getConfig().getSerializable("spawn", Location.class);
 
-		// signs = ((List<Location>)
-		// plugin.getSM().getLobbyConfig().getConfig().getList("signs", new
-		// LinkedList<Location>())).stream()
-		// .map(l -> l.getBlock()).collect(Collectors.toList());
+		// Load all sign locations
+		List<Location> signLocations = (List<Location>) plugin.getSM().getLobbyConfig().getConfig().getList("signs",
+				new LinkedList<Location>());
+
+		// Initialize map
+		signs = new HashMap<SGSign, Game>();
+
+		// Turn them into actual signs
+		List<SGSign> converted = signLocations.stream().map(l -> new SGSign(l.getBlock())).collect(Collectors.toList());
+		for (SGSign sign : converted) {
+			Game game = plugin.getGM().byName(sign.getGameName());
+			if (sign.isValid() && (game != null)) {
+				signs.put(sign, game);
+			}
+		}
+
 	}
 
 	public void shutdown() {
+		// Save spawn location
 		plugin.getSM().getLobbyConfig().getConfig().set("spawn", spawn);
-		// plugin.getSM().getLobbyConfig().getConfig().set("signs", signs.stream().map(b
-		// -> b.getLocation()).collect(Collectors.toList()));
+
+		// Grab all sign locations
+		List<Location> signLocations = signs.keySet().stream().map(s -> s.getLocation()).collect(Collectors.toList());
+
+		// Save them to the config
+		plugin.getSM().getLobbyConfig().getConfig().set("signs", signLocations);
+
+		// Save config to disk
 		plugin.getSM().getLobbyConfig().saveConfig();
 	}
 
-	/**
-	 * @return the spawn
-	 */
 	public Location getSpawn() {
 		return spawn;
 	}
 
-	/**
-	 * @return the signs
-	 */
-	public List<SGSign> getSigns() {
-		return signs;
-	}
-
-	/**
-	 * @param location The new lobby spawn location
-	 */
 	public void setSpawn(Location location) {
 		spawn = location;
 	}
 
-	public void createSign(SGSign sgSign) {
-		signs.add(sgSign);
+	public Set<SGSign> getSigns() {
+		return signs.keySet();
 	}
 
-	public void removeSign(SGSign sgSign) {
-		signs.remove(sgSign);
+	public boolean isGameSign(SGSign sign) {
+		return sign.isValid() && (plugin.getGM().byName(sign.getGameName()) != null);
 	}
 
-	public void update() {
-		System.out.println("Updating " + signs.size() + " signs");
-		for (SGSign sign : signs) {
-			// updateSign((Sign) sign.getState());
-		}
+	public void createSign(SGSign sign) {
+		signs.put(sign, plugin.getGM().byName(sign.getGameName()));
 	}
 
-	private void updateSign(Sign sign) {
-		Game game = plugin.getGM().byName(sign.getLine(1));
-		if (game != null) {
-			sign.setLine(2, String.format("Players: %d/%d", game.getAlive().size(), game.getMap().getSpawns().size()));
-			sign.setLine(3, game.getStatus().getReadable());
-		} else {
-			plugin.getLogger().warning("Could not find game from sign with name " + sign.getLine(1));
-		}
+	public void removeSign(SGSign sign) {
+		signs.remove(sign);
 	}
 
-	public boolean isGameSign(String[] strings) {
-		if (strings[0].equalsIgnoreCase("[SurvivalGames]")) {
-			if (plugin.getGM().byName(strings[1]) != null) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void playerClickedSign(Player player, String[] strings) {
-		Game game = plugin.getGM().byName(strings[1]);
+	public void playerClickedSign(Player player, SGSign sign) {
+		Game game = plugin.getGM().byName(sign.getGameName());
 		if (game != null) {
 			game.join(player);
-
 		}
 	}
 
-	public SGSign getSign(Block block) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateAllSigns() {
+		for (SGSign sign : signs.keySet()) {
+			sign.update(signs.get(sign));
+		}
 	}
+
+	public void updateGameSigns(Game game) {
+		for (Map.Entry<SGSign, Game> entry : signs.entrySet()) {
+			if (entry.getValue() == game) {
+				entry.getKey().update(game);
+			}
+		}
+	}
+
 }

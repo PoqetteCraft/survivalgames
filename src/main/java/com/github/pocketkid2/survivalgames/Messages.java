@@ -131,14 +131,14 @@ public interface Messages {
 		return INFO() + "Joined game " + MAP(name);
 	}
 
-	static String[] MAP_INFO(Game g) {
-		return new String[] { INFO() + "Name: " + MAP(g.getMap().getName()), INFO() + "Radius: " + NUMBER(g.getMap().getRadius()),
-				INFO() + "Status: " + g.getStatus().getReadable(),
-				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + g.getAlive().size() + "/" + g.getMap().getSpawns().size() };
+	static String[] MAP_INFO(Game game) {
+		return new String[] { INFO() + "Name: " + MAP(game.getMap().getName()), INFO() + "Radius: " + NUMBER(game.getMap().getRadius()),
+				INFO() + "Status: " + game.getStatus().getReadable(),
+				INFO() + "Players: " + ChatColor.LIGHT_PURPLE + game.currCount() + "/" + game.maxCount() };
 	}
 
-	static String LIST_GAME_NAME(Game g) {
-		return INFO() + "Name: " + MAP(g.getMap().getName()) + " Status: " + g.getStatus().getReadable();
+	static String LIST_GAME_NAME(Game game) {
+		return INFO() + "Name: " + MAP(game.getMap().getName()) + " Status: " + game.getStatus().getReadable();
 	}
 
 	static String GAME_STARTED(String name) {

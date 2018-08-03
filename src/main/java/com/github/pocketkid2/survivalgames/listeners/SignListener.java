@@ -1,7 +1,6 @@
 package com.github.pocketkid2.survivalgames.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -22,8 +21,9 @@ public class SignListener extends BaseListener {
 	public void onPlayerClickSign(PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (event.getClickedBlock().getType() == Material.WALL_SIGN) {
-				if (plugin.getLM().isGameSign(((Sign) event.getClickedBlock().getState()).getLines())) {
-					plugin.getLM().playerClickedSign(event.getPlayer(), ((Sign) event.getClickedBlock().getState()).getLines());
+				SGSign sign = new SGSign(event.getClickedBlock());
+				if (plugin.getLM().isGameSign(sign)) {
+					plugin.getLM().playerClickedSign(event.getPlayer(), sign);
 				}
 			}
 		}
@@ -31,8 +31,9 @@ public class SignListener extends BaseListener {
 
 	@EventHandler
 	public void onSignChange(SignChangeEvent event) {
-		if (plugin.getLM().isGameSign(event.getLines())) {
-			plugin.getLM().createSign(new SGSign(event.getBlock()));
+		SGSign sign = new SGSign(event.getBlock(), event.getLines());
+		if (plugin.getLM().isGameSign(sign)) {
+			plugin.getLM().createSign(sign);
 			event.getPlayer().sendMessage(Messages.SIGN_CREATED);
 		}
 	}
@@ -40,8 +41,9 @@ public class SignListener extends BaseListener {
 	@EventHandler
 	public void onSignBreak(BlockBreakEvent event) {
 		if (event.getBlock().getType() == Material.WALL_SIGN) {
-			if (plugin.getLM().isGameSign(((Sign) event.getBlock().getState()).getLines())) {
-				plugin.getLM().removeSign(plugin.getLM().getSign(event.getBlock()));
+			SGSign sign = new SGSign(event.getBlock());
+			if (plugin.getLM().isGameSign(sign)) {
+				plugin.getLM().removeSign(sign);
 				event.getPlayer().sendMessage(Messages.SIGN_REMOVED);
 			}
 		}

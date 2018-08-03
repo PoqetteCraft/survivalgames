@@ -15,16 +15,16 @@ public class GameListener extends BaseListener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinGameEvent event) {
-		plugin.getLM().update();
+		plugin.getLM().updateGameSigns(event.getGame());
 	}
 
 	@EventHandler
 	public void onPlayerLeave(PlayerLeaveGameEvent event) {
-		plugin.getLM().update();
+		plugin.getLM().updateGameSigns(event.getGame());
 	}
 
 	@EventHandler
 	public void onGameStatusChange(GameChangeStatusEvent event) {
-		plugin.getLM().update();
+		plugin.getLM().updateGameSigns(event.getGame());
 	}
 }

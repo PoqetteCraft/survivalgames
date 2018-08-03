@@ -60,7 +60,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 			plugin.loadMaps();
 			plugin.loadLobby();
 			plugin.registerListeners();
-			plugin.getLM().update();
+			plugin.getLM().updateAllSigns();
 		}
 
 	}
