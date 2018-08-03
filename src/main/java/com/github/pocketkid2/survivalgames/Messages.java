@@ -125,7 +125,7 @@ public interface Messages {
 	}
 
 	static String LIST_NUM_GAMES(int count) {
-		return INFO() + "There are " + NUMBER(count) + " maps";
+		return INFO() + "There are " + NUMBER(count) + " map" + ((count == 1) ? "" : "s");
 	}
 
 	static String JOINED_GAME(Arena arena) {
