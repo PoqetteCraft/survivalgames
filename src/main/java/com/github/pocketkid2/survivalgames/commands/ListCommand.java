@@ -14,7 +14,7 @@ import com.github.pocketkid2.survivalgames.SurvivalGamesPlugin;
 public class ListCommand extends SubCommand {
 
 	public ListCommand(SurvivalGamesPlugin pl) {
-		super(pl, 0, 1, Arrays.asList("list"), "[map]", "List all maps or players in a map", "list");
+		super(pl, 0, 1, Arrays.asList("list", "maps"), "[map]", "List all maps or players in a map", "list");
 	}
 
 	@Override
