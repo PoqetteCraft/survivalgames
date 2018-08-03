@@ -35,6 +35,9 @@ public class SignListener extends BaseListener {
 		if (plugin.getLM().isGameSign(sign)) {
 			plugin.getLM().createSign(sign);
 			event.getPlayer().sendMessage(Messages.SIGN_CREATED);
+			for (int i = 0; i < 4; i++) {
+				event.setLine(i, sign.getLines()[i]);
+			}
 		}
 	}
 

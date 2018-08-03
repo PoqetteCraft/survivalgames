@@ -75,10 +75,14 @@ public class LobbyManager {
 	}
 
 	public void createSign(SGSign sign) {
-		signs.put(sign, plugin.getGM().byName(sign.getGameName()));
+		plugin.getLogger().info("Added sign");
+		Game game = plugin.getGM().byName(sign.getGameName());
+		signs.put(sign, game);
+		sign.update(game);
 	}
 
 	public void removeSign(SGSign sign) {
+		plugin.getLogger().info("Removed sign");
 		signs.remove(sign);
 	}
 

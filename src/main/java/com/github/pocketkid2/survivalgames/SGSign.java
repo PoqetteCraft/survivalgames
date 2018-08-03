@@ -33,19 +33,14 @@ public class SGSign {
 		return block.getLocation();
 	}
 
-	private void readState() {
-		sign = (Sign) block.getState();
-	}
-
 	private void saveState() {
 		sign.update(true, false);
 	}
 
 	public boolean isValid() {
-		readState();
 		if (block != null) {
 			if (block.getType() == Material.WALL_SIGN) {
-				if (sign.getLine(0).equalsIgnoreCase(Values.SIGN_TITLE)) {
+				if (sign.getLine(TITLE_LINE).equalsIgnoreCase(Values.SIGN_TITLE)) {
 					return true;
 				}
 			}
@@ -54,7 +49,7 @@ public class SGSign {
 	}
 
 	public void update(Game game) {
-		if (isValid() && (game != null)) {
+		if (game != null) {
 			sign.setLine(TITLE_LINE, Values.SIGN_TITLE);
 			sign.setLine(GAME_LINE, Values.GAME_FORMAT(game.getMap().getName()));
 			sign.setLine(STATUS_LINE, Values.STATUS_FORMAT(game.getStatus()));
@@ -64,11 +59,7 @@ public class SGSign {
 	}
 
 	public String getGameName() {
-		if (isValid()) {
-			return sign.getLine(GAME_LINE);
-		} else {
-			return null;
-		}
+		return sign.getLine(GAME_LINE);
 	}
 
 	/*
@@ -107,6 +98,10 @@ public class SGSign {
 			}
 		}
 		return false;
+	}
+
+	public String[] getLines() {
+		return sign.getLines();
 	}
 
 }
