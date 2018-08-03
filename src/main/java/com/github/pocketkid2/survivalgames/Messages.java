@@ -151,7 +151,7 @@ public interface Messages {
 	}
 
 	static String GAME_STARTING_IN(int seconds) {
-		return INFO() + "Game will be starting in " + NUMBER(seconds) + " seconds!";
+		return INFO() + "Game will be starting in " + NUMBER(seconds) + " second" + ((seconds == 1) ? ("") : ("s")) + "!";
 	}
 
 	static String PLAYER_LEFT_GAME(String name) {
